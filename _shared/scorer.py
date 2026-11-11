@@ -1,40 +1,52 @@
 """
-_shared/scorer.py
-─────────────────
-Decision Economics scorer.
+_shared/scorer.py — Decision Economics scorer.
 
-Computes:
-    quality_score  = weighted sum of LLM-as-judge criteria (0.0 – 1.0)
+Computes three metrics for every agent run:
+
+    quality_score  = weighted sum of LLM-as-judge criteria  (0.0 – 1.0)
     token_cost_usd = input + output token spend in USD
-    cpcd           = token_cost_usd / quality_score  (cost-per-correct-decision)
+    cpcd           = token_cost_usd / quality_score   (cost-per-correct-decision)
+
+CPCD is $0.00 on Ollama (local tokens are free) and meaningful on Databricks,
+where real token costs make framework choice a financial decision.
 
 Usage:
     from _shared.scorer import score_run
 
     result = score_run(
-        agent_output="The BCBS 239 lineage for trade T-001 is ...",
-        task_description="Identify the data lineage for trade T-001 per BCBS 239.",
-        rubric_path="rubric.yaml",
-        token_usage={"input_tokens": 512, "output_tokens": 128},
-        backend="ollama",
+        agent_output     = "The BCBS 239 lineage for trade T-001 is ...",
+        task_description = "Identify the data lineage for trade T-001 per BCBS 239.",
+        rubric_path      = "rubric.yaml",
+        token_usage      = {"input_tokens": 512, "output_tokens": 128},
+        backend          = "ollama",
     )
-    print(result)
-    # {
-    #   "quality_score": 0.82,
-    #   "token_cost_usd": 0.0,
-    #   "cpcd": 0.0,            ← free on Ollama
-    #   "criteria_scores": {"correctness": 0.9, "tool_use": 0.8, ...},
-    #   "passed": True,
-    # }
+    # → {"quality_score": 0.82, "token_cost_usd": 0.0, "cpcd": 0.0, "passed": True, ...}
 """
+# ─────────────────────────────────────────────────────
+# Author   : Amit Dixit
+# GitHub   : https://github.com/inbravo
+# Web      : https://inbravo.github.io
+# LinkedIn : https://www.linkedin.com/in/inbravo/
+# ─────────────────────────────────────────────────────
+
 from __future__ import annotations
 
 import json
+import logging
+import sys
 from pathlib import Path
 from typing import Any
 
 import yaml
 
+sys.path.insert(0, str(Path(__file__).parent))
+import logging_config
+
+logging_config.setup()
+log = logging.getLogger("agent.scorer")
+
+
+# ── Public API ────────────────────────────────────────────────────────────────
 
 def score_run(
     agent_output: str,
@@ -45,15 +57,15 @@ def score_run(
     config_path: str | None = None,
 ) -> dict[str, Any]:
     """
-    Score a single agent run.
+    Score a single agent run against a rubric and return decision economics.
 
     Args:
-        agent_output:    The agent's final response text.
+        agent_output:     The agent's final response text.
         task_description: What the agent was asked to do.
-        rubric_path:     Path to the rubric YAML (relative to cwd or absolute).
-        token_usage:     {"input_tokens": int, "output_tokens": int}
-        backend:         "ollama" or "databricks" — determines cost rates.
-        config_path:     Optional path to config.yaml (defaults to cwd/config.yaml).
+        rubric_path:      Path to the rubric YAML (relative to cwd or absolute).
+        token_usage:      {"input_tokens": int, "output_tokens": int}
+        backend:          "ollama" or "databricks" — determines cost rates.
+        config_path:      Optional path to config.yaml (defaults to cwd/config.yaml).
 
     Returns:
         Dict with quality_score, token_cost_usd, cpcd, criteria_scores, passed.
@@ -62,31 +74,36 @@ def score_run(
     config = _load_config(config_path)
 
     criteria_scores = _judge(
-        agent_output=agent_output,
-        task_description=task_description,
-        rubric=rubric,
-        backend=backend,
-        config=config,
+        agent_output     = agent_output,
+        task_description = task_description,
+        rubric           = rubric,
+        backend          = backend,
+        config           = config,
     )
 
     quality_score = _weighted_sum(criteria_scores, rubric["rubric"]["criteria"])
-    token_cost = _compute_token_cost(token_usage or {}, backend, config)
-    threshold = rubric["rubric"]["scoring"].get("pass_threshold", 0.70)
-    passed = quality_score >= threshold
+    token_cost    = _compute_token_cost(token_usage or {}, backend, config)
+    threshold     = rubric["rubric"]["scoring"].get("pass_threshold", 0.70)
+    passed        = quality_score >= threshold
 
     cpcd: float | None = None
     if passed and token_cost > 0:
         cpcd = token_cost / quality_score
     elif passed and token_cost == 0:
-        cpcd = 0.0  # Ollama: correct answer at zero cost
+        cpcd = 0.0  # Ollama: correct answer at zero monetary cost
+
+    log.info(
+        "Score: quality=%.3f  cost=$%.8f  cpcd=%s  passed=%s  backend=%s",
+        quality_score, token_cost, cpcd, passed, backend,
+    )
 
     return {
-        "quality_score": round(quality_score, 4),
+        "quality_score":  round(quality_score, 4),
         "token_cost_usd": round(token_cost, 8),
-        "cpcd": round(cpcd, 8) if cpcd is not None else None,
+        "cpcd":           round(cpcd, 8) if cpcd is not None else None,
         "criteria_scores": criteria_scores,
-        "passed": passed,
-        "backend": backend,
+        "passed":         passed,
+        "backend":        backend,
     }
 
 
@@ -97,8 +114,8 @@ def _load_rubric(rubric_path: str) -> dict[str, Any]:
     if not path.is_absolute():
         path = Path.cwd() / path
     if not path.exists():
-        # Fall back to base rubric in _shared/
         path = Path(__file__).parent / "rubric_base.yaml"
+    log.debug("Loading rubric from %s", path)
     with open(path) as f:
         return yaml.safe_load(f)
 
@@ -123,15 +140,14 @@ def _judge(
     backend: str,
     config: dict[str, Any],
 ) -> dict[str, float]:
-    """Call the judge LLM and return criterion id → score."""
-    criteria = rubric["rubric"]["criteria"]
-    prefix = rubric["rubric"].get("judge_prompt_prefix", "")
-
+    """Call the judge LLM and return criterion id → score (0.0 – 1.0)."""
+    criteria     = rubric["rubric"]["criteria"]
+    prefix       = rubric["rubric"].get("judge_prompt_prefix", "")
+    ids          = [c["id"] for c in criteria]
     criteria_desc = "\n".join(
         f'- {c["id"]}: {c["description"]}'
         for c in criteria
     )
-    ids = [c["id"] for c in criteria]
 
     prompt = (
         f"{prefix}\n\n"
@@ -142,22 +158,20 @@ def _judge(
     )
 
     try:
-        from _shared.backend import get_llm  # type: ignore
-        judge_model_key = config.get("decision_economics", {}).get("judge_model", {}).get(backend, "")
-        # Use a fresh LLM configured for the judge model if specified
-        llm = get_llm()
+        from backend import get_llm  # type: ignore
+        llm      = get_llm()
         response = llm.invoke(prompt)
-        content = response.content if hasattr(response, "content") else str(response)
-        # Extract JSON from response
-        start = content.find("{")
-        end = content.rfind("}") + 1
+        content  = response.content if hasattr(response, "content") else str(response)
+        start    = content.find("{")
+        end      = content.rfind("}") + 1
         if start >= 0 and end > start:
             scores = json.loads(content[start:end])
+            log.debug("Judge scores: %s", scores)
             return {k: float(scores.get(k, 0.5)) for k in ids}
-    except Exception:
-        pass
+    except Exception as exc:
+        log.warning("Judge LLM failed (%s) — using neutral fallback scores", exc)
 
-    # Fallback: return neutral scores so caller can still compute CPCD
+    # Fallback: neutral scores so caller can still compute CPCD
     return {c["id"]: 0.5 for c in criteria}
 
 
@@ -178,10 +192,14 @@ def _compute_token_cost(
     if not de.get("enabled", True):
         return 0.0
 
-    input_rate = de.get("input_token_cost_usd", {}).get(backend, 0.0)
+    input_rate  = de.get("input_token_cost_usd",  {}).get(backend, 0.0)
     output_rate = de.get("output_token_cost_usd", {}).get(backend, 0.0)
+    input_toks  = token_usage.get("input_tokens",  0)
+    output_toks = token_usage.get("output_tokens", 0)
 
-    input_tokens = token_usage.get("input_tokens", 0)
-    output_tokens = token_usage.get("output_tokens", 0)
-
-    return (input_tokens * input_rate) + (output_tokens * output_rate)
+    cost = (input_toks * input_rate) + (output_toks * output_rate)
+    log.debug(
+        "Token cost: input=%d×%.8f + output=%d×%.8f = $%.8f",
+        input_toks, input_rate, output_toks, output_rate, cost,
+    )
+    return cost

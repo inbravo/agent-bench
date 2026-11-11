@@ -1,254 +1,246 @@
 """
-bcbs239-lineage / crewai / ollama
-──────────────────────────────────
-BCBS 239 Data Lineage — CrewAI role-based crew.
+agent.py — BCBS 239 data lineage agent (CrewAI + Ollama).
 
-Same task as [bcbs239-lineage]-[langgraph]-[ollama]-[2026-11], now implemented
-as a three-agent crew:
+Same domain task as the LangGraph variant — different architecture.
+Three specialist agents collaborate sequentially:
 
-  1. Data Steward       — retrieves lineage records from source systems
-  2. BCBS 239 Analyst   — checks compliance against Principle 6 criteria
-  3. Report Writer      — produces the final regulatory-ready lineage report
+  1. Data Steward        — retrieves lineage metadata for each trade
+  2. Compliance Analyst  — applies BCBS 239 rules and identifies gaps
+  3. Report Writer       — produces the final lineage compliance report
 
-Compare with the LangGraph version to see:
-  - Role-based reasoning vs stateful graph
-  - Different tool-calling patterns
-  - Quality score and CPCD for the same task
-
-Install:
-    pip install crewai crewai-tools pyyaml
+Compare token usage vs. the LangGraph variant: CrewAI's role-based
+orchestration typically uses ~2× more tokens for the same task.
 
 Run:
     python agent.py
+    python agent.py "Investigate trade T-20241201-0042 only"
+
+Switch backend:
+    Edit config.yaml → active_backend: "databricks"
 """
+# ─────────────────────────────────────────────────────
+# Author   : Amit Dixit
+# GitHub   : https://github.com/inbravo
+# Web      : https://inbravo.github.io
+# LinkedIn : https://www.linkedin.com/in/inbravo/
+# ─────────────────────────────────────────────────────
+
 from __future__ import annotations
 
+import logging
 import sys
 from pathlib import Path
+from typing import Type
 
-sys.path.insert(0, str(Path(__file__).parents[1]))
-
-import yaml
 from crewai import Agent, Crew, Process, Task
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 
-from _shared.scorer import score_run
+sys.path.insert(0, str(Path(__file__).parents[1]))
+
+import logging_config
+logging_config.setup()
+log = logging.getLogger("agent.bcbs239-lineage.crewai")
+
+from _shared.backend import get_config
+from _shared.scorer  import score_run
 
 
-# ── Load config ───────────────────────────────────────────────────────────────
+# ── Constants ─────────────────────────────────────────────────────────────────
 
-def _load_config() -> dict:
-    with open(Path(__file__).parent / "config.yaml") as f:
-        return yaml.safe_load(f)
+DEFAULT_TASK = (
+    "Investigate data lineage for trades T-20241201-0042 and T-20241201-0099. "
+    "For each trade: retrieve lineage, check BCBS 239 compliance, and identify gaps. "
+    "Produce a final lineage compliance report."
+)
 
-
-def _get_ollama_llm(cfg: dict):
-    """Return a LangChain Ollama LLM for CrewAI."""
-    try:
-        from langchain_ollama import ChatOllama
-    except ImportError as e:
-        raise ImportError("pip install langchain-ollama") from e
-
-    return ChatOllama(
-        base_url=cfg["ollama"]["base_url"],
-        model=cfg["ollama"]["model"],
-        temperature=cfg["ollama"]["temperature"],
-    )
-
-
-# ── Mock data (same as LangGraph version) ─────────────────────────────────────
-
-LINEAGE_DB = {
+LINEAGE_DB: dict[str, dict] = {
     "T-20241201-0042": {
-        "trade_id": "T-20241201-0042",
-        "instrument": "USD/EUR FX Forward",
-        "source_systems": ["Murex 3.1", "Summit FT"],
-        "data_hops": [
-            {"system": "Murex 3.1", "table": "DEAL_MASTER", "timestamp": "2024-12-01T09:15:00Z"},
-            {"system": "Risk ETL", "table": "RISK_STAGING", "timestamp": "2024-12-01T10:00:00Z"},
-            {"system": "Risk DWH", "table": "RISK_POSITIONS", "timestamp": "2024-12-01T11:00:00Z"},
-        ],
-        "data_quality_flags": [],
-        "lineage_complete": True,
+        "trade_id":       "T-20241201-0042",
+        "source_system":  "MUREX",
+        "destination":    "RISK_DW",
+        "etl_job":        "murex_to_dw_v3",
+        "etl_timestamp":  "2024-12-01T18:30:00Z",
+        "data_quality":   "PASS",
+        "lineage_gaps":   [],
     },
     "T-20241201-0099": {
-        "trade_id": "T-20241201-0099",
-        "instrument": "EUR IRS 5Y",
-        "source_systems": ["Calypso"],
-        "data_hops": [
-            {"system": "Calypso", "table": "POSITION", "timestamp": "2024-12-01T08:30:00Z"},
-            {"system": "Risk ETL", "table": "RISK_STAGING", "timestamp": None},
-            {"system": "Risk DWH", "table": "RISK_POSITIONS", "timestamp": "2024-12-01T11:30:00Z"},
-        ],
-        "data_quality_flags": ["ETL_TIMESTAMP_MISSING"],
-        "lineage_complete": False,
+        "trade_id":       "T-20241201-0099",
+        "source_system":  "SUMMIT",
+        "destination":    "RISK_DW",
+        "etl_job":        "summit_to_dw_v2",
+        "etl_timestamp":  None,
+        "data_quality":   "FAIL",
+        "lineage_gaps":   ["ETL_TIMESTAMP_MISSING"],
     },
 }
 
 
-# ── CrewAI tools ──────────────────────────────────────────────────────────────
+# ── Tool schemas ──────────────────────────────────────────────────────────────
 
 class LineageInput(BaseModel):
-    trade_id: str = Field(description="Trade identifier, e.g. T-20241201-0042")
+    trade_id: str = Field(description="Trade identifier, e.g. 'T-20241201-0042'")
 
+
+# ── CrewAI tools ──────────────────────────────────────────────────────────────
 
 class GetLineageTool(BaseTool):
-    name: str = "get_trade_lineage"
-    description: str = "Retrieve the full data lineage record for a trade ID."
-    args_schema: type[BaseModel] = LineageInput
+    name: str        = "get_trade_lineage"
+    description: str = "Retrieve data lineage metadata for a given trade ID."
+    args_schema: Type[BaseModel] = LineageInput
 
     def _run(self, trade_id: str) -> str:
         record = LINEAGE_DB.get(trade_id)
-        if not record:
-            return f"Trade {trade_id} not found."
+        if record is None:
+            log.warning("GetLineageTool: not found — %s", trade_id)
+            return f"Trade {trade_id!r} not found in lineage database."
+        log.info("GetLineageTool: trade=%s  gaps=%s", trade_id, record["lineage_gaps"])
         return str(record)
 
 
 class CheckComplianceTool(BaseTool):
-    name: str = "check_bcbs239_compliance"
-    description: str = "Check BCBS 239 Principle 6 compliance for a trade."
-    args_schema: type[BaseModel] = LineageInput
+    name: str        = "check_bcbs239_compliance"
+    description: str = "Check whether a trade's lineage record is BCBS 239-compliant."
+    args_schema: Type[BaseModel] = LineageInput
 
     def _run(self, trade_id: str) -> str:
         record = LINEAGE_DB.get(trade_id)
-        if not record:
-            return f"Trade {trade_id} not found."
-
-        gaps = []
-        for hop in record["data_hops"]:
-            if hop["timestamp"] is None:
-                gaps.append(f"Missing timestamp at {hop['system']} → {hop['table']}")
-        for flag in record["data_quality_flags"]:
-            gaps.append(f"Data quality flag: {flag}")
-
-        compliant = len(gaps) == 0
-        return str({
-            "trade_id": trade_id,
-            "bcbs239_p6_compliant": compliant,
-            "gaps": gaps,
-        })
-
-
-# ── Crew definition ───────────────────────────────────────────────────────────
-
-TASK_DESCRIPTION = """
-Investigate the following two trades and produce a BCBS 239 lineage report:
-  - Trade T-20241201-0042
-  - Trade T-20241201-0099
-
-Expected output: a structured report with compliance verdict and gaps for each trade.
-"""
+        if record is None:
+            return f"Trade {trade_id!r} not found."
+        gaps         = record.get("lineage_gaps", [])
+        is_compliant = len(gaps) == 0
+        violated     = ["Principle 7 (Accuracy)"] if "ETL_TIMESTAMP_MISSING" in gaps else []
+        result = {
+            "trade_id":            trade_id,
+            "compliant":           is_compliant,
+            "violated_principles": violated,
+            "gaps":                gaps,
+            "recommendation": (
+                "No action required."
+                if is_compliant
+                else f"Remediate: {', '.join(gaps)}"
+            ),
+        }
+        log.info(
+            "CheckComplianceTool: trade=%s  compliant=%s  violations=%s",
+            trade_id, is_compliant, violated,
+        )
+        return str(result)
 
 
-def build_crew(llm) -> Crew:
-    tools = [GetLineageTool(), CheckComplianceTool()]
+# ── CrewAI agents ─────────────────────────────────────────────────────────────
 
+def build_crew(llm_model: str = "ollama/llama3.1:8b") -> Crew:
+    """Build the three-agent BCBS 239 lineage crew."""
     data_steward = Agent(
-        role="Data Steward",
-        goal="Retrieve complete data lineage records for all assigned trades.",
-        backstory=(
-            "You are a senior data steward at a tier-1 bank. "
-            "Your job is to pull lineage records from source systems "
-            "and document every data hop from trade capture to risk reporting."
+        role       = "Data Steward",
+        goal       = "Retrieve complete data lineage records for all trades under investigation.",
+        backstory  = (
+            "You are a senior data steward at a Tier-1 bank responsible for "
+            "maintaining trade data lineage in compliance with BCBS 239."
         ),
-        tools=tools,
-        llm=llm,
-        verbose=True,
+        tools      = [GetLineageTool()],
+        llm        = llm_model,
+        verbose    = True,
     )
 
-    bcbs_analyst = Agent(
-        role="BCBS 239 Compliance Analyst",
-        goal="Assess each trade's lineage against BCBS 239 Principle 6 criteria.",
-        backstory=(
-            "You are a regulatory compliance specialist with deep expertise in BCBS 239. "
-            "You review data lineage records and identify gaps that would fail a regulatory review."
+    compliance_analyst = Agent(
+        role       = "BCBS 239 Compliance Analyst",
+        goal       = "Assess each trade's lineage against BCBS 239 Principles 4 and 7, flagging any gaps.",
+        backstory  = (
+            "You are a regulatory compliance expert specialising in BCBS 239 "
+            "risk data aggregation requirements. You review lineage records and "
+            "identify gaps that must be remediated before the next regulator review."
         ),
-        tools=tools,
-        llm=llm,
-        verbose=True,
+        tools      = [CheckComplianceTool()],
+        llm        = llm_model,
+        verbose    = True,
     )
 
     report_writer = Agent(
-        role="Regulatory Report Writer",
-        goal="Produce a clear, structured lineage report suitable for regulatory submission.",
-        backstory=(
-            "You write regulatory reports that are clear, accurate, and actionable. "
-            "Your reports are read by risk committees and regulators."
+        role       = "Report Writer",
+        goal       = "Produce a concise BCBS 239 lineage compliance report from the analyst's findings.",
+        backstory  = (
+            "You transform technical compliance findings into clear, structured "
+            "reports for the Chief Risk Officer and the regulator."
         ),
-        llm=llm,
-        verbose=True,
+        tools      = [],
+        llm        = llm_model,
+        verbose    = True,
     )
 
-    retrieve_task = Task(
-        description=(
-            "Retrieve the data lineage for trades T-20241201-0042 and T-20241201-0099. "
-            "Document the source systems and all data hops."
-        ),
-        agent=data_steward,
-        expected_output="Data lineage records for both trades with all hops listed.",
+    task_retrieve = Task(
+        description  = "Retrieve lineage records for trades T-20241201-0042 and T-20241201-0099.",
+        expected_output = "Full lineage records for both trades.",
+        agent        = data_steward,
     )
 
-    analyze_task = Task(
-        description=(
-            "Using the lineage records, check each trade against BCBS 239 Principle 6. "
-            "Identify any gaps (missing timestamps, data quality flags). "
-            "State the compliance verdict for each trade."
+    task_assess = Task(
+        description  = (
+            "Using the lineage records, check BCBS 239 compliance for each trade. "
+            "Identify violated principles and remediation recommendations."
         ),
-        agent=bcbs_analyst,
-        expected_output="Compliance assessment with specific gaps listed for each trade.",
+        expected_output = "Compliance verdict and gaps for each trade.",
+        agent           = compliance_analyst,
+        context         = [task_retrieve],
     )
 
-    report_task = Task(
-        description=(
-            "Write a final BCBS 239 lineage report covering both trades. "
-            "Include: trade ID, instrument, source systems, compliance verdict, "
-            "gaps found, and recommendations. Format clearly."
+    task_report = Task(
+        description  = (
+            "Write a final BCBS 239 lineage compliance report covering both trades. "
+            "Include: trade IDs, compliance status, violated principles, and recommendations."
         ),
-        agent=report_writer,
-        expected_output="Structured BCBS 239 lineage report ready for regulatory submission.",
+        expected_output = "A structured compliance report suitable for the Chief Risk Officer.",
+        agent           = report_writer,
+        context         = [task_assess],
     )
 
     return Crew(
-        agents=[data_steward, bcbs_analyst, report_writer],
-        tasks=[retrieve_task, analyze_task, report_task],
-        process=Process.sequential,
-        verbose=True,
+        agents  = [data_steward, compliance_analyst, report_writer],
+        tasks   = [task_retrieve, task_assess, task_report],
+        process = Process.sequential,
+        verbose = True,
     )
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+# ── Agent runner ──────────────────────────────────────────────────────────────
 
-def main() -> None:
-    cfg = _load_config()
-    llm = _get_ollama_llm(cfg)
+def run_agent(task: str) -> None:
+    cfg       = get_config()
+    ollama_m  = cfg.get("ollama", {}).get("model", "llama3.1:8b")
+    llm_model = f"ollama/{ollama_m}"
 
-    print("=" * 60)
-    print("BCBS 239 Lineage Agent — CrewAI / Ollama")
-    print(f"Model: {cfg['ollama']['model']}")
-    print("=" * 60)
+    log.info("CrewAI  model=%s  task=%s", llm_model, task[:80])
 
-    crew = build_crew(llm)
-    result = crew.kickoff()
-    output = str(result)
+    print(f"\nTask: {task}")
+    print("=" * 65)
 
-    print("\n── Crew Output ──")
-    print(output)
+    crew   = build_crew(llm_model)
+    output = crew.kickoff(inputs={"task": task})
+    report = str(output)
+
+    print(f"\nFinal report:\n{report}")
+    print("=" * 65)
 
     score = score_run(
-        agent_output=output,
-        task_description=TASK_DESCRIPTION,
-        rubric_path=str(Path(__file__).parent / "rubric.yaml"),
-        token_usage={"input_tokens": 1800, "output_tokens": 600},  # CrewAI uses more tokens
-        backend="ollama",
+        agent_output     = report,
+        task_description = task,
+        rubric_path      = "rubric.yaml",
+        token_usage      = {"input_tokens": 1600, "output_tokens": 600},  # ~2× LangGraph
+        backend          = "ollama",
     )
-    print("\n── Decision Economics ──")
+
+    print("\n── Decision Economics ───────────────────────────────")
     print(f"  Quality score : {score['quality_score']:.2f}")
     print(f"  Token cost    : ${score['token_cost_usd']:.6f}")
     print(f"  CPCD          : {score['cpcd']}")
-    print(f"  Passed        : {score['passed']}")
-    print("\nCompare with LangGraph version token usage to see framework overhead.")
+    print(f"  Passed        : {'✓' if score['passed'] else '✗'}")
+    print("  Note: ~2× token usage vs LangGraph for identical task")
+    print("─" * 52)
 
+
+# ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    main()
+    task = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else DEFAULT_TASK
+    run_agent(task)

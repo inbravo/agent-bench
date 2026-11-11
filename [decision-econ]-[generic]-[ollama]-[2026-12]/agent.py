@@ -1,28 +1,47 @@
 """
-decision-econ / generic / ollama
-──────────────────────────────────
-Decision Economics harness.
+agent.py — Decision Economics comparison harness.
 
-This module is framework-agnostic. It demonstrates:
-  1. How to define a rubric YAML and use LLM-as-judge scoring
-  2. How to compute CPCD (cost-per-correct-decision)
-  3. How to compare multiple agent runs on the same task
-  4. How to build a comparison table across frameworks/backends
+Scores and ranks synthetic agent runs from multiple frameworks side-by-side.
+Use this to understand which framework produces the best cost-per-correct-decision
+(CPCD) for a given BFSI task.
 
-Run standalone to see the scoring logic:
+CPCD formula:
+    cpcd = token_cost_usd / quality_score
+
+Lower CPCD = better.  On Ollama all runs show $0.00 (local tokens are free).
+On Databricks, real token costs make CPCD a live financial decision metric.
+
+Frameworks compared in this demo:
+  langgraph / ollama     — baseline (stateful graph, low token overhead)
+  crewai / ollama        — multi-agent (higher token usage, richer output)
+  langgraph / databricks — production (real cost, MLflow traces)
+
+Run:
     python agent.py
 
-Or import the harness into any framework example:
-    from [decision-econ]-[generic]-[ollama]-[2026-12].harness import compare_runs
+Switch to real runs:
+    Replace ScoredRun entries with calls to score_run() after running each example.
 """
+# ─────────────────────────────────────────────────────
+# Author   : Amit Dixit
+# GitHub   : https://github.com/inbravo
+# Web      : https://inbravo.github.io
+# LinkedIn : https://www.linkedin.com/in/inbravo/
+# ─────────────────────────────────────────────────────
+
 from __future__ import annotations
 
+import logging
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).parents[1]))
+
+import logging_config
+logging_config.setup()
+log = logging.getLogger("agent.decision-econ")
 
 from _shared.scorer import score_run
 
@@ -31,50 +50,50 @@ from _shared.scorer import score_run
 
 @dataclass
 class AgentRun:
-    """Record of a single agent run."""
-    run_id: str
-    framework: str
-    backend: str
+    """Metadata and raw output from a single agent run."""
+    run_id:           str
+    framework:        str
+    backend:          str
     task_description: str
-    agent_output: str
-    token_usage: dict[str, int]
-    metadata: dict[str, Any] = field(default_factory=dict)
+    agent_output:     str
+    token_usage:      dict[str, int]
+    metadata:         dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class ScoredRun:
-    """AgentRun with decision economics scores attached."""
-    run: AgentRun
-    quality_score: float
+    """AgentRun enriched with decision economics metrics."""
+    run:            AgentRun
+    quality_score:  float
     token_cost_usd: float
-    cpcd: float | None
+    cpcd:           float | None
     criteria_scores: dict[str, float]
-    passed: bool
+    passed:         bool
 
 
-# ── Harness ───────────────────────────────────────────────────────────────────
+# ── Scoring helpers ───────────────────────────────────────────────────────────
 
 def score_agent_run(
     run: AgentRun,
     rubric_path: str = "rubric.yaml",
     config_path: str | None = None,
 ) -> ScoredRun:
-    """Score a single agent run and return a ScoredRun."""
+    """Score a single AgentRun and return a ScoredRun."""
     result = score_run(
-        agent_output=run.agent_output,
-        task_description=run.task_description,
-        rubric_path=rubric_path,
-        token_usage=run.token_usage,
-        backend=run.backend,
-        config_path=config_path,
+        agent_output     = run.agent_output,
+        task_description = run.task_description,
+        rubric_path      = rubric_path,
+        token_usage      = run.token_usage,
+        backend          = run.backend,
+        config_path      = config_path,
     )
     return ScoredRun(
-        run=run,
-        quality_score=result["quality_score"],
-        token_cost_usd=result["token_cost_usd"],
-        cpcd=result["cpcd"],
-        criteria_scores=result["criteria_scores"],
-        passed=result["passed"],
+        run             = run,
+        quality_score   = result["quality_score"],
+        token_cost_usd  = result["token_cost_usd"],
+        cpcd            = result["cpcd"],
+        criteria_scores = result["criteria_scores"],
+        passed          = result["passed"],
     )
 
 
@@ -83,114 +102,115 @@ def compare_runs(
     rubric_path: str = "rubric.yaml",
     config_path: str | None = None,
 ) -> list[ScoredRun]:
-    """Score multiple runs and return them sorted by CPCD (best first)."""
-    scored = [score_agent_run(r, rubric_path, config_path) for r in runs]
-    # Sort: passed runs first, then by CPCD ascending, then by quality descending
-    scored.sort(key=lambda s: (
-        not s.passed,
-        s.cpcd if s.cpcd is not None else float("inf"),
-        -s.quality_score,
-    ))
-    return scored
+    """
+    Score all runs and return them sorted by CPCD (passed runs first, then ascending CPCD).
 
+    Args:
+        runs:        List of AgentRun objects to compare.
+        rubric_path: Shared rubric YAML path.
+        config_path: Optional config.yaml path.
+
+    Returns:
+        Sorted list of ScoredRun objects.
+    """
+    scored = [score_agent_run(r, rubric_path, config_path) for r in runs]
+    return sorted(
+        scored,
+        key=lambda s: (not s.passed, s.cpcd if s.cpcd is not None else float("inf")),
+    )
+
+
+# ── Output ────────────────────────────────────────────────────────────────────
 
 def print_comparison_table(scored_runs: list[ScoredRun]) -> None:
-    """Print a comparison table to stdout."""
-    header = f"{'Run ID':<25} {'Framework':<12} {'Backend':<12} {'Quality':>8} {'Cost USD':>10} {'CPCD':>12} {'Pass':>5}"
-    print("=" * len(header))
-    print("DECISION ECONOMICS — RUN COMPARISON")
-    print("=" * len(header))
+    """Print a formatted comparison table to stdout."""
+    header = (
+        f"{'Run ID':<24}  {'Framework':<10}  {'Backend':<11}  "
+        f"{'Quality':>7}  {'Cost USD':>10}  {'CPCD':>12}  {'Pass'}"
+    )
+    sep    = "─" * len(header)
+
+    print(f"\n{sep}")
     print(header)
-    print("-" * len(header))
+    print(sep)
 
     for s in scored_runs:
-        cpcd_str = f"${s.cpcd:.6f}" if s.cpcd is not None else "n/a"
-        cost_str = f"${s.token_cost_usd:.6f}"
-        pass_str = "✓" if s.passed else "✗"
+        cpcd_str = f"${s.cpcd:.6f}" if s.cpcd is not None else "N/A"
+        passed   = "✓" if s.passed else "✗"
         print(
-            f"{s.run.run_id:<25} "
-            f"{s.run.framework:<12} "
-            f"{s.run.backend:<12} "
-            f"{s.quality_score:>8.2f} "
-            f"{cost_str:>10} "
-            f"{cpcd_str:>12} "
-            f"{pass_str:>5}"
+            f"{s.run.run_id:<24}  {s.run.framework:<10}  {s.run.backend:<11}  "
+            f"{s.quality_score:>7.2f}  ${s.token_cost_usd:>9.6f}  "
+            f"{cpcd_str:>12}  {passed}"
         )
-    print("=" * len(header))
 
-    if scored_runs:
-        best = scored_runs[0]
-        if best.passed:
-            print(f"\n→ Best CPCD: {best.run.run_id} ({best.run.framework}/{best.run.backend})")
-        else:
-            print("\n→ No runs passed the quality threshold.")
+    print(sep)
+    best = next((s for s in scored_runs if s.passed), None)
+    if best:
+        print(f"\n  Best CPCD: {best.run.run_id}  ({best.run.framework} / {best.run.backend})")
+    print()
 
 
-# ── Demo: synthetic comparison ────────────────────────────────────────────────
+# ── Demo data ─────────────────────────────────────────────────────────────────
 
-DEMO_TASK = "Identify the data lineage gaps for trade T-20241201-0099 per BCBS 239 Principle 6."
+DEMO_TASK = (
+    "Investigate data lineage for trade T-20241201-0042 and check BCBS 239 compliance."
+)
 
-DEMO_RUNS = [
+DEMO_RUNS: list[AgentRun] = [
     AgentRun(
-        run_id="langgraph-ollama-8b",
-        framework="langgraph",
-        backend="ollama",
-        task_description=DEMO_TASK,
-        agent_output=(
-            "Trade T-20241201-0099 (EUR IRS 5Y) has the following BCBS 239 P6 gap: "
-            "the Risk ETL hop from Calypso POSITION to RISK_STAGING is missing its timestamp. "
-            "This violates P6 completeness requirements. "
-            "Recommendation: investigate the Calypso-to-ETL pipeline and add timestamp logging."
+        run_id           = "run-langgraph-ollama",
+        framework        = "langgraph",
+        backend          = "ollama",
+        task_description = DEMO_TASK,
+        agent_output     = (
+            "Trade T-20241201-0042 sourced from MUREX, loaded to RISK_DW via "
+            "murex_to_dw_v3 at 2024-12-01T18:30:00Z. All BCBS 239 lineage fields "
+            "present. Data quality: PASS. No compliance gaps found."
         ),
-        token_usage={"input_tokens": 820, "output_tokens": 180},
+        token_usage = {"input_tokens": 800, "output_tokens": 300},
     ),
     AgentRun(
-        run_id="crewai-ollama-8b",
-        framework="crewai",
-        backend="ollama",
-        task_description=DEMO_TASK,
-        agent_output=(
-            "The BCBS 239 lineage review for T-20241201-0099 found one gap: "
-            "missing ETL timestamp at the Risk Staging hop. "
-            "The trade is not compliant with BCBS 239 P6 and should not be submitted."
+        run_id           = "run-crewai-ollama",
+        framework        = "crewai",
+        backend          = "ollama",
+        task_description = DEMO_TASK,
+        agent_output     = (
+            "BCBS 239 Lineage Report — Trade T-20241201-0042\n"
+            "Source: MUREX | Destination: RISK_DW | ETL Job: murex_to_dw_v3\n"
+            "ETL Timestamp: 2024-12-01T18:30:00Z | Data Quality: PASS\n"
+            "Compliance Status: COMPLIANT\n"
+            "Violated Principles: None\n"
+            "Recommendation: No action required."
         ),
-        token_usage={"input_tokens": 1800, "output_tokens": 400},
+        token_usage = {"input_tokens": 1600, "output_tokens": 600},  # ~2× LangGraph
     ),
     AgentRun(
-        run_id="langgraph-databricks-70b",
-        framework="langgraph",
-        backend="databricks",
-        task_description=DEMO_TASK,
-        agent_output=(
-            "BCBS 239 Principle 6 Lineage Assessment — Trade T-20241201-0099: "
-            "Source system: Calypso. Data hops: 3 total (Calypso POSITION → Risk ETL RISK_STAGING → Risk DWH RISK_POSITIONS). "
-            "Gap identified: Risk ETL hop timestamp is null. This breaks the audit chain. "
-            "Data quality flag: ETL_TIMESTAMP_MISSING. "
-            "Verdict: NOT compliant with BCBS 239 P6. "
-            "Recommendation: (1) Fix ETL timestamp logging. (2) Re-run lineage validation. "
-            "(3) Re-submit only after all hops show timestamps."
+        run_id           = "run-langgraph-databricks",
+        framework        = "langgraph",
+        backend          = "databricks",
+        task_description = DEMO_TASK,
+        agent_output     = (
+            "Trade T-20241201-0042: MUREX → RISK_DW, ETL at 18:30 UTC. "
+            "BCBS 239 compliant — all required fields populated. "
+            "No remediation required."
         ),
-        token_usage={"input_tokens": 820, "output_tokens": 280},
+        token_usage = {"input_tokens": 800, "output_tokens": 300},
     ),
 ]
 
 
-def main() -> None:
-    print("Decision Economics Harness — demo with synthetic runs")
-    print("(In production, replace DEMO_RUNS with real agent.py outputs)\n")
-
-    rubric_path = str(Path(__file__).parent / "rubric.yaml")
-    config_path = str(Path(__file__).parent / "config.yaml")
-
-    scored = compare_runs(DEMO_RUNS, rubric_path=rubric_path, config_path=config_path)
-    print_comparison_table(scored)
-
-    print("\n── Per-criterion breakdown ──")
-    for s in scored:
-        print(f"\n  {s.run.run_id}:")
-        for criterion, score in s.criteria_scores.items():
-            print(f"    {criterion:<25} {score:.2f}")
-
+# ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    main()
+    log.info("Decision economics comparison — %d runs", len(DEMO_RUNS))
+
+    print("=" * 65)
+    print("Decision Economics — Framework Comparison")
+    print("Task:", DEMO_TASK)
+    print("=" * 65)
+
+    scored = compare_runs(DEMO_RUNS, rubric_path="rubric.yaml")
+    print_comparison_table(scored)
+
+    print("Note: Ollama CPCD = $0.00 (local tokens are free).")
+    print("      Switch to Databricks backend for real cost comparison.")
