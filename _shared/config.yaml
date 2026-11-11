@@ -1,0 +1,34 @@
+# Shared backend configuration — copied into each example folder and edited per run
+# Switch LLM_BACKEND between 'ollama' and 'databricks' to change the execution target
+
+# ── Local Ollama backend ──────────────────────────────────────────────────────
+ollama:
+  base_url: "http://localhost:11434"
+  model: "llama3.1:8b"          # swap to qwen2.5:7b for better tool calls
+  temperature: 0.0
+  timeout_seconds: 120
+
+# ── Databricks Foundation Model APIs backend ──────────────────────────────────
+databricks:
+  host: "${DATABRICKS_HOST}"    # set in .env or environment
+  token: "${DATABRICKS_TOKEN}"
+  model: "databricks-meta-llama-3-1-70b-instruct"
+  temperature: 0.0
+  mlflow_experiment: "/Shared/agentic-ai-lab"
+  unity_catalog_schema: "main.agentic_lab"
+
+# ── Active backend (change this line to switch) ───────────────────────────────
+active_backend: "ollama"
+
+# ── Decision Economics settings ───────────────────────────────────────────────
+decision_economics:
+  enabled: true
+  input_token_cost_usd:
+    ollama: 0.0                 # free — local hardware
+    databricks: 0.00000050      # ~$0.50 per 1M input tokens (Llama 3.1 70B)
+  output_token_cost_usd:
+    ollama: 0.0
+    databricks: 0.00000150      # ~$1.50 per 1M output tokens
+  judge_model:
+    ollama: "llama3.1:8b"
+    databricks: "databricks-meta-llama-3-1-405b-instruct"

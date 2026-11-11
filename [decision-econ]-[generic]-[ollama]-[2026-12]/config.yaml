@@ -1,0 +1,29 @@
+# decision-econ / generic / ollama
+# Purpose: decision economics harness — works with any framework/task
+
+active_backend: "ollama"
+
+ollama:
+  base_url: "http://localhost:11434"
+  model: "llama3.1:8b"
+  temperature: 0.0
+  timeout_seconds: 120
+
+databricks:
+  host: "${DATABRICKS_HOST}"
+  token: "${DATABRICKS_TOKEN}"
+  model: "databricks-meta-llama-3-1-70b-instruct"
+  temperature: 0.0
+  mlflow_experiment: "/Shared/agentic-ai-lab/decision-econ"
+
+decision_economics:
+  enabled: true
+  input_token_cost_usd:
+    ollama: 0.0
+    databricks: 0.00000050
+  output_token_cost_usd:
+    ollama: 0.0
+    databricks: 0.00000150
+  judge_model:
+    ollama: "llama3.1:8b"
+    databricks: "databricks-meta-llama-3-1-405b-instruct"

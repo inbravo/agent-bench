@@ -1,0 +1,35 @@
+# Base rubric template — copy into each example and customise the criteria
+# Used by LLM-as-judge to score agent outputs (0.0 – 1.0 per criterion)
+
+rubric:
+  name: "base-rubric"
+  version: "1.0"
+  judge_prompt_prefix: |
+    You are an expert evaluator. Score the agent output strictly against each criterion.
+    Return a JSON object with keys matching the criterion IDs and float values 0.0–1.0.
+    Do not add commentary outside the JSON.
+
+  criteria:
+    - id: "correctness"
+      weight: 0.40
+      description: "The answer is factually correct and complete for the given task."
+
+    - id: "tool_use"
+      weight: 0.25
+      description: "The agent called the right tools in the right order with correct parameters."
+
+    - id: "reasoning"
+      weight: 0.20
+      description: "The chain of reasoning is coherent and traceable step by step."
+
+    - id: "conciseness"
+      weight: 0.15
+      description: "The answer is concise — no hallucinated filler, no repeated content."
+
+  scoring:
+    formula: "weighted_sum"      # sum(weight * score) for all criteria
+    pass_threshold: 0.70         # CPCD is computed only for passing runs
+
+  cpcd:
+    formula: "token_cost_usd / quality_score"
+    note: "Cost-per-correct-decision — lower is better"

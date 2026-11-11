@@ -1,0 +1,39 @@
+# decision-econ rubric — generic BCBS 239 lineage task
+# This rubric intentionally matches the bcbs239-lineage rubric
+# so CPCD is comparable across all three examples (LangGraph, CrewAI, Databricks)
+
+rubric:
+  name: "bcbs239-lineage-generic"
+  version: "1.0"
+  judge_prompt_prefix: |
+    You are a BCBS 239 expert evaluating an AI agent's lineage gap analysis.
+    Score strictly against each criterion.
+    Return JSON only — no other text.
+
+  criteria:
+    - id: "gap_identified"
+      weight: 0.40
+      description: >
+        The agent correctly identifies the missing ETL timestamp on T-20241201-0099
+        as the BCBS 239 P6 gap.
+
+    - id: "compliance_verdict"
+      weight: 0.30
+      description: >
+        The agent states the correct verdict: T-0099 is NOT compliant.
+
+    - id: "recommendation_quality"
+      weight: 0.20
+      description: "The agent provides at least one actionable recommendation."
+
+    - id: "conciseness"
+      weight: 0.10
+      description: "The answer is concise — no hallucinated filler."
+
+  scoring:
+    formula: "weighted_sum"
+    pass_threshold: 0.70
+
+  cpcd:
+    formula: "token_cost_usd / quality_score"
+    note: "The whole point of this example — compare CPCD across all three runs"
