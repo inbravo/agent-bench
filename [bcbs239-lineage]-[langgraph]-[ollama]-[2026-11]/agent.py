@@ -42,6 +42,7 @@ from langgraph.prebuilt import ToolNode
 from typing_extensions import TypedDict
 
 sys.path.insert(0, str(Path(__file__).parents[1]))
+sys.path.insert(0, str(Path(__file__).parents[1] / "_shared"))
 
 import logging_config
 logging_config.setup()

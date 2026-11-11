@@ -43,6 +43,7 @@ from typing_extensions import TypedDict
 
 # Allow importing _shared from anywhere
 sys.path.insert(0, str(Path(__file__).parents[1]))
+sys.path.insert(0, str(Path(__file__).parents[1] / "_shared"))
 
 import logging_config  # noqa: E402  (must come after sys.path insert)
 logging_config.setup()
