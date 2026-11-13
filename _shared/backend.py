@@ -139,7 +139,7 @@ def _make_databricks_llm(db_cfg: dict[str, Any]):
             "Copy .env.example to .env and fill in your values."
         )
 
-    experiment = db_cfg.get("mlflow_experiment", "/Shared/agentic-ai-lab")
+    experiment = db_cfg.get("mlflow_experiment", "/Shared/agent-bench")
     mlflow.langchain.autolog()
     mlflow.set_experiment(experiment)
     log.info("Databricks model: %s  experiment: %s", db_cfg.get("model"), experiment)

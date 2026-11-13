@@ -1,4 +1,4 @@
-# CLAUDE.md — agentic-ai-lab
+# CLAUDE.md — agent-bench
 
 This file tells Claude Code how to work in this repository.
 

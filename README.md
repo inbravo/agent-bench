@@ -1,4 +1,4 @@
-# agentic-ai-lab
+# agent-bench
 
 > This lab is my place to keep the Agentic AI stuff — practical blueprints for agent evaluation, harness design, and decision economics, running the same BFSI task across multiple frameworks and backends.
 
@@ -224,7 +224,7 @@ This makes agent performance economically defensible — not just "did it work" 
 | Repo | Focus |
 |---|---|
 | [context-lab](https://github.com/inbravo/context-lab) | Context Engineering — data contracts, semantic layers, ontologies, MCP, decision economics |
-| [agentic-ai-lab](https://github.com/inbravo/agentic-ai-lab) | Agentic AI — frameworks, harness, eval, decision economics on BFSI tasks |
+| [agent-bench](https://github.com/inbravo/agent-bench) | Agentic AI — frameworks, harness, eval, decision economics on BFSI tasks |
 
 ---
 

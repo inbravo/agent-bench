@@ -76,7 +76,7 @@ python agent.py
 After running, open your Databricks workspace:
 
 ```
-Experiments → /Shared/agentic-ai-lab/bcbs239 → [your run]
+Experiments → /Shared/agent-bench/bcbs239 → [your run]
 ```
 
 Each run shows:

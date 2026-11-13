@@ -1,7 +1,7 @@
 """
-logging_config.py — Shared logging setup for the agentic-ai-lab.
+logging_config.py — Shared logging setup for the agent-bench.
 
-Log file : ../logs/agentic-ai-lab.log  (RotatingFileHandler, 5 MB × 3 backups)
+Log file : ../logs/agent-bench.log  (RotatingFileHandler, 5 MB × 3 backups)
 File     : DEBUG and above  (every detail, including tool calls and scoring)
 Console  : INFO and above   (key events only — not noisy during normal runs)
 
@@ -24,7 +24,7 @@ import logging
 import logging.handlers
 from pathlib import Path
 
-LOG_FILE = Path(__file__).parent.parent / "logs" / "agentic-ai-lab.log"
+LOG_FILE = Path(__file__).parent.parent / "logs" / "agent-bench.log"
 
 _configured = False
 

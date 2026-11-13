@@ -13,7 +13,7 @@ Requires:
     DATABRICKS_TOKEN — set in .env or environment
 
 MLflow experiment:
-    /Shared/agentic-ai-lab  (configurable in config.yaml)
+    /Shared/agent-bench  (configurable in config.yaml)
 
 Run:
     python agent.py
@@ -86,7 +86,7 @@ def run_agent(task: str) -> None:
         config_path      = CONFIG_PATH,
     )
 
-    experiment = cfg.get("databricks", {}).get("mlflow_experiment", "/Shared/agentic-ai-lab")
+    experiment = cfg.get("databricks", {}).get("mlflow_experiment", "/Shared/agent-bench")
     print(f"\n  MLflow traces → {experiment}")
     print("\n── Decision Economics ───────────────────────────────")
     print(f"  Quality score : {score['quality_score']:.2f}")
