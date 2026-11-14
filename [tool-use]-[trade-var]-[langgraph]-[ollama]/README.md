@@ -1,4 +1,4 @@
-# tool-use-baseline / langgraph / ollama
+# tool-use / langgraph / ollama
 
 **Phase 1 — Foundations**  
 Calibrate which Ollama models reliably call tools before building domain examples.
@@ -26,7 +26,7 @@ ollama pull mistral-nemo
 pip install langchain-ollama langgraph pyyaml
 
 # 3. Run
-cd [tool-use-baseline]-[langgraph]-[ollama]-[2026-11]
+cd [tool-use]-[trade-var]-[langgraph]-[ollama]
 python agent.py
 
 # 4. Run tests

@@ -19,7 +19,7 @@ The lab's signature metric: cost-per-correct-decision across all frameworks and 
 ## Quick Start
 
 ```bash
-cd [decision-econ]-[generic]-[ollama]-[2026-12]
+cd [cpcd]-[generic]-[multi]-[ollama]
 python agent.py
 ```
 
@@ -86,7 +86,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path.cwd().parents[0]))
 
-from [decision-econ]-[generic]-[ollama]-[2026-12].agent import AgentRun, compare_runs, print_comparison_table
+from [cpcd]-[generic]-[multi]-[ollama].agent import AgentRun, compare_runs, print_comparison_table
 
 runs = [
     AgentRun(

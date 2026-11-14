@@ -1,4 +1,4 @@
-# tool-use-baseline / langgraph / ollama
+# tool-use / langgraph / ollama
 # Purpose: calibrate which Ollama models reliably call tools before committing to a model
 
 active_backend: "ollama"

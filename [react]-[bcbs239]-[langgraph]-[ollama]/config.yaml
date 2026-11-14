@@ -1,7 +1,7 @@
-# bcbs239-lineage / langgraph / databricks
-# Purpose: same BCBS 239 lineage agent running on Databricks with MLflow tracing
+# bcbs239 / langgraph / ollama
+# Purpose: BCBS 239 data lineage agent — local Ollama iteration
 
-active_backend: "databricks"
+active_backend: "ollama"
 
 ollama:
   base_url: "http://localhost:11434"
@@ -15,7 +15,6 @@ databricks:
   model: "databricks-meta-llama-3-1-70b-instruct"
   temperature: 0.0
   mlflow_experiment: "/Shared/agent-bench/bcbs239"
-  unity_catalog_schema: "main.agentic_lab"
 
 decision_economics:
   enabled: true

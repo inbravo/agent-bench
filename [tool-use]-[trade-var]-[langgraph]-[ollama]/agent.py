@@ -47,7 +47,7 @@ sys.path.insert(0, str(Path(__file__).parents[1] / "_shared"))
 
 import logging_config  # noqa: E402  (must come after sys.path insert)
 logging_config.setup()
-log = logging.getLogger("agent.tool-use-baseline")
+log = logging.getLogger("agent.tool-use")
 
 from _shared.backend import get_llm    # noqa: E402
 from _shared.scorer  import score_run  # noqa: E402

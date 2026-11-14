@@ -37,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).parents[1] / "_shared"))
 
 import logging_config
 logging_config.setup()
-log = logging.getLogger("agent.bcbs239-lineage.databricks")
+log = logging.getLogger("agent.bcbs239.databricks")
 
 # Re-use all tools and graph logic from the Ollama variant
 from _shared.backend import get_llm, get_config
@@ -46,7 +46,7 @@ from _shared.scorer  import score_run
 # Import the graph builder and task from the sibling Ollama folder
 OLLAMA_DIR = (
     Path(__file__).parents[1]
-    / "[bcbs239-lineage]-[langgraph]-[ollama]-[2026-11]"
+    / "[react]-[bcbs239]-[langgraph]-[ollama]"
 )
 sys.path.insert(0, str(OLLAMA_DIR))
 from agent import build_graph, DEFAULT_TASK  # noqa: E402

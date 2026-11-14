@@ -1,5 +1,5 @@
 """
-Tests for tool-use-baseline — runs against local Ollama.
+Tests for tool-use — runs against local Ollama.
 Run: pytest tests/test_local.py -v
 Requires: Ollama running on localhost:11434 with llama3.1:8b pulled.
 """

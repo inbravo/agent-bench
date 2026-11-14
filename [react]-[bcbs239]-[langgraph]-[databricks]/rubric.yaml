@@ -1,6 +1,6 @@
 # Same rubric as the Ollama version — CPCD is now meaningful (non-zero cost)
 rubric:
-  name: "bcbs239-lineage-databricks"
+  name: "bcbs239-databricks"
   version: "1.0"
   judge_prompt_prefix: |
     You are a BCBS 239 expert evaluating an AI agent's data lineage report.

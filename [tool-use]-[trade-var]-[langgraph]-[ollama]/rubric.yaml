@@ -1,5 +1,5 @@
 rubric:
-  name: "tool-use-baseline"
+  name: "tool-use"
   version: "1.0"
   judge_prompt_prefix: |
     You are evaluating a tool-use baseline agent.

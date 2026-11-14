@@ -14,7 +14,7 @@ Companion repo: https://github.com/inbravo/context-lab
 [task]-[framework]-[backend]-[YYYY-MM]/
 ```
 
-- `[task]` — the problem being solved (e.g. `bcbs239-lineage`, `frtb-calc`, `tool-use-baseline`)
+- `[task]` — the problem being solved (e.g. `bcbs239`, `frtb-calc`, `tool-use`)
 - `[framework]` — the agentic framework (e.g. `langgraph`, `crewai`, `mosaic`, `cortex`)
 - `[backend]` — the LLM backend (e.g. `ollama`, `databricks`, `snowflake`, `generic`)
 - `[YYYY-MM]` — month created

@@ -1,9 +1,8 @@
-# Same criteria as LangGraph version — enables apples-to-apples comparison
 rubric:
-  name: "bcbs239-lineage-crewai"
+  name: "bcbs239"
   version: "1.0"
   judge_prompt_prefix: |
-    You are a BCBS 239 expert evaluating an AI crew's data lineage report.
+    You are a BCBS 239 expert evaluating an AI agent's data lineage report.
     Score strictly against each criterion.
     Return JSON only — no other text.
 
@@ -17,16 +16,19 @@ rubric:
     - id: "gap_identified"
       weight: 0.30
       description: >
-        The crew correctly identifies the missing ETL timestamp on T-20241201-0099.
+        The agent correctly identifies the missing ETL timestamp on T-20241201-0099
+        and flags it as a BCBS 239 P6 gap.
 
     - id: "compliance_verdict"
       weight: 0.25
       description: >
-        Correct verdicts: T-0042 ready, T-0099 not ready.
+        The compliance verdicts are correct: T-0042 is ready for submission,
+        T-0099 is NOT ready.
 
     - id: "recommendation_quality"
       weight: 0.15
-      description: "Actionable recommendations for resolving gaps."
+      description: >
+        The report includes actionable recommendations for resolving the gaps.
 
   scoring:
     formula: "weighted_sum"
@@ -34,4 +36,3 @@ rubric:
 
   cpcd:
     formula: "token_cost_usd / quality_score"
-    note: "Compare with LangGraph version — CrewAI uses ~2x tokens for the same task"

@@ -1,9 +1,9 @@
 # decision-econ rubric — generic BCBS 239 lineage task
-# This rubric intentionally matches the bcbs239-lineage rubric
+# This rubric intentionally matches the bcbs239 rubric
 # so CPCD is comparable across all three examples (LangGraph, CrewAI, Databricks)
 
 rubric:
-  name: "bcbs239-lineage-generic"
+  name: "bcbs239-generic"
   version: "1.0"
   judge_prompt_prefix: |
     You are a BCBS 239 expert evaluating an AI agent's lineage gap analysis.

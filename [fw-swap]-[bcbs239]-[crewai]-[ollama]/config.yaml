@@ -1,20 +1,20 @@
-# bcbs239-lineage / langgraph / ollama
-# Purpose: BCBS 239 data lineage agent — local Ollama iteration
+# bcbs239 / crewai / ollama
+# Purpose: same BCBS 239 task as the LangGraph version — now as a CrewAI role-based crew
 
 active_backend: "ollama"
 
 ollama:
   base_url: "http://localhost:11434"
   model: "llama3.1:8b"
-  temperature: 0.0
-  timeout_seconds: 180
+  temperature: 0.1          # slightly warmer for role-play diversity
+  timeout_seconds: 240      # CrewAI crews take longer (sequential role execution)
 
 databricks:
   host: "${DATABRICKS_HOST}"
   token: "${DATABRICKS_TOKEN}"
   model: "databricks-meta-llama-3-1-70b-instruct"
-  temperature: 0.0
-  mlflow_experiment: "/Shared/agent-bench/bcbs239"
+  temperature: 0.1
+  mlflow_experiment: "/Shared/agent-bench/bcbs239-crewai"
 
 decision_economics:
   enabled: true

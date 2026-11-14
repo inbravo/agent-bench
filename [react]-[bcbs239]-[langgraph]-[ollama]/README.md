@@ -1,4 +1,4 @@
-# bcbs239-lineage / langgraph / ollama
+# bcbs239 / langgraph / ollama
 
 **Phase 1 — Foundations**  
 Your first domain-specific agent: BCBS 239 data lineage on a stateful LangGraph graph.
@@ -18,14 +18,14 @@ Your first domain-specific agent: BCBS 239 data lineage on a stateful LangGraph 
 ## Quick Start
 
 ```bash
-# 1. Pull model (from tool-use-baseline, you already know which one works)
+# 1. Pull model (from tool-use, you already know which one works)
 ollama pull llama3.1:8b
 
 # 2. Install dependencies
 pip install langchain-ollama langgraph pyyaml
 
 # 3. Run
-cd [bcbs239-lineage]-[langgraph]-[ollama]-[2026-11]
+cd [react]-[bcbs239]-[langgraph]-[ollama]
 python agent.py
 
 # 4. Test
@@ -72,7 +72,7 @@ pytest tests/ -v
 
 ---
 
-## Key Difference vs tool-use-baseline
+## Key Difference vs tool-use
 
 > **This example has domain semantics.**  
 > The rubric now checks whether the agent understands BCBS 239 P6 — not just whether it called tools.  

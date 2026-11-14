@@ -41,7 +41,7 @@ sys.path.insert(0, str(Path(__file__).parents[1] / "_shared"))
 
 import logging_config
 logging_config.setup()
-log = logging.getLogger("agent.bcbs239-lineage.crewai")
+log = logging.getLogger("agent.bcbs239.crewai")
 
 from _shared.backend import get_config
 from _shared.scorer  import score_run

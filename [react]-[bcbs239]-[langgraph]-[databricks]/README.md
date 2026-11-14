@@ -1,4 +1,4 @@
-# bcbs239-lineage / langgraph / databricks
+# bcbs239 / langgraph / databricks
 
 **Phase 1 — Foundations**  
 Same BCBS 239 agent as the Ollama version — now on Databricks with MLflow tracing.
@@ -26,7 +26,7 @@ cp ../.env.example .env
 pip install langchain-databricks mlflow langgraph pyyaml
 
 # 3. Run
-cd [bcbs239-lineage]-[langgraph]-[databricks]-[2026-11]
+cd [react]-[bcbs239]-[langgraph]-[databricks]
 python agent.py
 ```
 

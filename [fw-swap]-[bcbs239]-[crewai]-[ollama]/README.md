@@ -1,4 +1,4 @@
-# bcbs239-lineage / crewai / ollama
+# bcbs239 / crewai / ollama
 
 **Phase 2 — Multi-Agent Patterns**  
 Same BCBS 239 task, now as a three-agent CrewAI crew. Framework comparison starts here.
@@ -22,7 +22,7 @@ Same BCBS 239 task, now as a three-agent CrewAI crew. Framework comparison start
 pip install crewai crewai-tools langchain-ollama pyyaml
 
 # Run
-cd [bcbs239-lineage]-[crewai]-[ollama]-[2026-12]
+cd [fw-swap]-[bcbs239]-[crewai]-[ollama]
 python agent.py
 ```
 
