@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).parents[2] / "_shared"))
 import logging_config
 logging_config.setup()
 
-from backend import get_config, get_llm
+from backend import get_llm
 from scorer  import score_run
 
 # ── logging ───────────────────────────────────────────
@@ -105,8 +105,7 @@ TOOLS = [get_current_weather, convert_temperature]
 
 def build_graph(config_path: str = CONFIG_PATH):
     """Build and return a compiled LangGraph ReAct agent."""
-    config = get_config(config_path=config_path)
-    llm    = get_llm(config)
+    llm    = get_llm(config_path)
     return create_react_agent(llm, tools=TOOLS)
 
 
