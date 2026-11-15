@@ -96,11 +96,14 @@ def score_run(
     threshold     = rubric.get("scoring", {}).get("pass_threshold", 0.70)
     passed        = quality_score >= threshold
 
-    cpcd: float | None = None
-    if passed and token_cost > 0:
+    # For Ollama (zero cost), cpcd=0.0 regardless of pass_threshold.
+    # For paid backends, cpcd is only meaningful on passing runs.
+    if token_cost == 0:
+        cpcd = 0.0          # local inference: cost is always zero
+    elif passed and token_cost > 0:
         cpcd = token_cost / quality_score
-    elif passed and token_cost == 0:
-        cpcd = 0.0  # Ollama: correct answer at zero monetary cost
+    else:
+        cpcd = None         # paid backend, run failed — discard
 
     log.info(
         "Score: quality=%.3f  cost=$%.8f  cpcd=%s  passed=%s  backend=%s",
@@ -173,12 +176,17 @@ def _judge(
         llm      = get_llm()
         response = llm.invoke(prompt)
         content  = response.content if hasattr(response, "content") else str(response)
+        # LLM sometimes returns a list of message chunks — join them
+        if isinstance(content, list):
+            content = " ".join(str(c) for c in content)
         start    = content.find("{")
         end      = content.rfind("}") + 1
         if start >= 0 and end > start:
             scores = json.loads(content[start:end])
             log.debug("Judge scores: %s", scores)
-            return {k: float(scores.get(k, 0.5)) for k in ids}
+            # Values may be nested lists (e.g. [[0.8]]) — flatten to float
+            return {k: float(v[0] if isinstance(v, list) else v) for k, v in
+                    ((k, scores.get(k, 0.5)) for k in ids)}
     except Exception as exc:
         log.warning("Judge LLM failed (%s) — using neutral fallback scores", exc)
 

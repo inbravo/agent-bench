@@ -34,7 +34,10 @@ log = logging.getLogger("agent.react.book-finder")
 
 # ── imports ───────────────────────────────────────────
 from langchain_core.tools    import tool
-from langgraph.prebuilt      import create_react_agent
+try:
+    from langgraph.prebuilt import create_react_agent
+except ImportError:
+    from langchain.agents import create_react_agent
 from langchain_core.messages import HumanMessage
 
 # ── constants ─────────────────────────────────────────
@@ -177,8 +180,9 @@ def run_agent(task: str, config_path: str = CONFIG_PATH) -> dict:
 
     scored = score_run(task=task, answer=answer, config_path=config_path)
     log.info(
-        "score=%.3f  token_cost=$%.6f  cpcd=$%.6f",
-        scored["quality_score"], scored["token_cost_usd"], scored["cpcd"],
+        "score=%.3f  token_cost=$%.6f  cpcd=%s",
+        scored["quality_score"], scored["token_cost_usd"],
+        f'${scored["cpcd"]:.6f}' if scored["cpcd"] is not None else "N/A (failed run)",
     )
     log.info("─── react / book-finder done ───")
     return scored
@@ -193,4 +197,4 @@ if __name__ == "__main__":
     print(f"Answer : {result['answer']}")
     print(f"Score  : {result['quality_score']:.3f}")
     print(f"Cost   : ${result['token_cost_usd']:.6f}")
-    print(f"CPCD   : ${result['cpcd']:.6f}")
+    print(f"CPCD   : " + (f"${result['cpcd']:.6f}" if result["cpcd"] is not None else "N/A"))
