@@ -77,18 +77,23 @@ def get_llm(config_path: str | None = None):
     """
     Return a LangChain-compatible chat LLM configured for the active backend.
 
+    Config keys (flat structure in config.yaml):
+        llm_backend:  ollama | databricks   (default: ollama)
+        llm_model:    e.g. llama3.1:8b
+        ollama_host:  http://localhost:11434
+
     Returns:
         ChatOllama or ChatDatabricks — both implement BaseChatModel so agent
         code is fully backend-agnostic.
     """
     cfg     = get_config(config_path)
-    backend = cfg.get("active_backend", "ollama")
+    backend = cfg.get("llm_backend", cfg.get("active_backend", "ollama"))
     log.info("Backend selected: %s", backend)
 
     if backend == "ollama":
-        return _make_ollama_llm(cfg["ollama"])
+        return _make_ollama_llm(cfg)
     elif backend == "databricks":
-        return _make_databricks_llm(cfg["databricks"])
+        return _make_databricks_llm(cfg)
     else:
         raise ValueError(
             f"Unknown backend: {backend!r}. "
@@ -98,8 +103,8 @@ def get_llm(config_path: str | None = None):
 
 # ── Backend factories ─────────────────────────────────────────────────────────
 
-def _make_ollama_llm(ollama_cfg: dict[str, Any]):
-    """Create a ChatOllama instance from the [ollama] config section."""
+def _make_ollama_llm(cfg: dict[str, Any]):
+    """Create a ChatOllama instance from flat config keys."""
     try:
         from langchain_ollama import ChatOllama
     except ImportError as e:
@@ -108,18 +113,18 @@ def _make_ollama_llm(ollama_cfg: dict[str, Any]):
             "Run: pip install langchain-ollama"
         ) from e
 
-    model = ollama_cfg.get("model", "llama3.1:8b")
+    model = cfg.get("llm_model", "llama3.1:8b")
     log.info("Ollama model: %s", model)
 
     return ChatOllama(
-        base_url   = ollama_cfg.get("base_url", "http://localhost:11434"),
+        base_url   = cfg.get("ollama_host", "http://localhost:11434"),
         model      = model,
-        temperature= ollama_cfg.get("temperature", 0.0),
-        timeout    = ollama_cfg.get("timeout_seconds", 120),
+        temperature= cfg.get("temperature", 0.0),
+        timeout    = cfg.get("timeout_seconds", 120),
     )
 
 
-def _make_databricks_llm(db_cfg: dict[str, Any]):
+def _make_databricks_llm(cfg: dict[str, Any]):
     """Create a ChatDatabricks instance with MLflow auto-tracing enabled."""
     try:
         import mlflow
@@ -130,8 +135,8 @@ def _make_databricks_llm(db_cfg: dict[str, Any]):
             "Run: pip install langchain-databricks mlflow"
         ) from e
 
-    host  = _resolve_env(db_cfg.get("host",  "${DATABRICKS_HOST}"))
-    token = _resolve_env(db_cfg.get("token", "${DATABRICKS_TOKEN}"))
+    host  = _resolve_env(cfg.get("databricks_host",  "${DATABRICKS_HOST}"))
+    token = _resolve_env(cfg.get("databricks_token", "${DATABRICKS_TOKEN}"))
 
     if not host or not token:
         raise EnvironmentError(
@@ -139,14 +144,14 @@ def _make_databricks_llm(db_cfg: dict[str, Any]):
             "Copy .env.example to .env and fill in your values."
         )
 
-    experiment = db_cfg.get("mlflow_experiment", "/Shared/agent-bench")
+    experiment = cfg.get("mlflow_experiment", "/Shared/agent-bench")
     mlflow.langchain.autolog()
     mlflow.set_experiment(experiment)
-    log.info("Databricks model: %s  experiment: %s", db_cfg.get("model"), experiment)
+    log.info("Databricks model: %s  experiment: %s", cfg.get("llm_model"), experiment)
 
     return ChatDatabricks(
-        endpoint   = db_cfg.get("model", "databricks-meta-llama-3-1-70b-instruct"),
-        temperature= db_cfg.get("temperature", 0.0),
+        endpoint   = cfg.get("llm_model", "databricks-meta-llama-3-1-70b-instruct"),
+        temperature= cfg.get("temperature", 0.0),
         host       = host,
         token      = token,
     )

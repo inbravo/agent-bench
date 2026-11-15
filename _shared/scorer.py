@@ -49,27 +49,37 @@ log = logging.getLogger("agent.scorer")
 # ── Public API ────────────────────────────────────────────────────────────────
 
 def score_run(
-    agent_output: str,
-    task_description: str,
+    agent_output: str | None = None,
+    task_description: str | None = None,
     rubric_path: str = "rubric.yaml",
     token_usage: dict[str, int] | None = None,
     backend: str = "ollama",
     config_path: str | None = None,
+    # Convenience aliases used by agent.py call sites
+    answer: str | None = None,
+    task: str | None = None,
 ) -> dict[str, Any]:
     """
     Score a single agent run against a rubric and return decision economics.
 
     Args:
-        agent_output:     The agent's final response text.
-        task_description: What the agent was asked to do.
-        rubric_path:      Path to the rubric YAML (relative to cwd or absolute).
-        token_usage:      {"input_tokens": int, "output_tokens": int}
-        backend:          "ollama" or "databricks" — determines cost rates.
-        config_path:      Optional path to config.yaml (defaults to cwd/config.yaml).
+        agent_output / answer:          The agent's final response text.
+        task_description / task:        What the agent was asked to do.
+        rubric_path:                    Path to rubric YAML (relative to cwd or absolute).
+        token_usage:                    {"input_tokens": int, "output_tokens": int}
+        backend:                        "ollama" or "databricks" — determines cost rates.
+        config_path:                    Optional path to config.yaml.
 
     Returns:
-        Dict with quality_score, token_cost_usd, cpcd, criteria_scores, passed.
+        Dict with quality_score, token_cost_usd, cpcd, criteria_scores, passed, answer.
     """
+    # Accept both naming conventions
+    agent_output     = agent_output     or answer          or ""
+    task_description = task_description or task            or ""
+
+    # Resolve rubric_path relative to the config file's directory when possible
+    if rubric_path == "rubric.yaml" and config_path:
+        rubric_path = str(Path(config_path).parent / "rubric.yaml")
     rubric = _load_rubric(rubric_path)
     config = _load_config(config_path)
 
@@ -81,9 +91,9 @@ def score_run(
         config           = config,
     )
 
-    quality_score = _weighted_sum(criteria_scores, rubric["rubric"]["criteria"])
+    quality_score = _weighted_sum(criteria_scores, rubric["criteria"])
     token_cost    = _compute_token_cost(token_usage or {}, backend, config)
-    threshold     = rubric["rubric"]["scoring"].get("pass_threshold", 0.70)
+    threshold     = rubric.get("scoring", {}).get("pass_threshold", 0.70)
     passed        = quality_score >= threshold
 
     cpcd: float | None = None
@@ -98,6 +108,7 @@ def score_run(
     )
 
     return {
+        "answer":         agent_output,
         "quality_score":  round(quality_score, 4),
         "token_cost_usd": round(token_cost, 8),
         "cpcd":           round(cpcd, 8) if cpcd is not None else None,
@@ -141,11 +152,11 @@ def _judge(
     config: dict[str, Any],
 ) -> dict[str, float]:
     """Call the judge LLM and return criterion id → score (0.0 – 1.0)."""
-    criteria     = rubric["rubric"]["criteria"]
-    prefix       = rubric["rubric"].get("judge_prompt_prefix", "")
-    ids          = [c["id"] for c in criteria]
+    criteria     = rubric["criteria"]
+    prefix       = rubric.get("judge_prompt_prefix", "")
+    ids          = [c["name"] for c in criteria]
     criteria_desc = "\n".join(
-        f'- {c["id"]}: {c["description"]}'
+        f'- {c["name"]}: {c["description"]}'
         for c in criteria
     )
 
@@ -172,12 +183,12 @@ def _judge(
         log.warning("Judge LLM failed (%s) — using neutral fallback scores", exc)
 
     # Fallback: neutral scores so caller can still compute CPCD
-    return {c["id"]: 0.5 for c in criteria}
+    return {c["name"]: 0.5 for c in criteria}
 
 
 def _weighted_sum(scores: dict[str, float], criteria: list[dict[str, Any]]) -> float:
     total = sum(
-        c["weight"] * scores.get(c["id"], 0.0)
+        c["weight"] * scores.get(c["name"], 0.0)
         for c in criteria
     )
     return min(1.0, max(0.0, total))
