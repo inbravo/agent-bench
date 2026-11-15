@@ -1,50 +1,65 @@
-.PHONY: setup run-example1 run-bcbs run-bcbs-databricks run-bcbs-crewai run-compare test test-all clean help
+# ─────────────────────────────────────────────────────────────────────────────
+# agent-bench — Makefile
+# Author   : Amit Dixit (https://github.com/inbravo)
+# ─────────────────────────────────────────────────────────────────────────────
 
-VENV := .venv
-PYTHON := $(VENV)/bin/python
-PIP := $(VENV)/bin/pip
+PYTHON   := python
+VENV     := .venv
+PIP      := $(VENV)/bin/pip
+PYTEST   := $(VENV)/bin/pytest
 
+.PHONY: setup
 setup:
-	python3 -m venv $(VENV)
+	$(PYTHON) -m venv $(VENV)
 	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
-	@echo ""
-	@echo "venv ready. Activate with: source .venv/bin/activate"
+	$(PIP) install langgraph langchain-community crewai pyyaml pytest
 
-run-example1:
-	$(PYTHON) "[tool-use-baseline]-[langgraph]-[ollama]-[2026-11]/agent.py"
+.PHONY: tool-use
+tool-use:
+	$(PYTHON) reasoning/\[tool-use\]-\[langgraph\]-\[ollama\]/agent.py
 
-run-bcbs:
-	$(PYTHON) "[bcbs239-lineage]-[langgraph]-[ollama]-[2026-11]/agent.py"
+.PHONY: react
+react:
+	$(PYTHON) reasoning/\[react\]-\[langgraph\]-\[ollama\]/agent.py
 
-run-bcbs-databricks:
-	$(PYTHON) "[bcbs239-lineage]-[langgraph]-[databricks]-[2026-11]/agent.py"
+.PHONY: fw-swap
+fw-swap:
+	$(PYTHON) topology/\[fw-swap\]-\[crewai\]-\[ollama\]/agent.py
 
-run-bcbs-crewai:
-	$(PYTHON) "[bcbs239-lineage]-[crewai]-[ollama]-[2026-12]/agent.py"
+.PHONY: cpcd
+cpcd:
+	$(PYTHON) decision-econ/\[cpcd\]-\[multi\]-\[ollama\]/agent.py
 
-run-compare:
-	$(PYTHON) "[decision-econ]-[generic]-[ollama]-[2026-12]/agent.py"
+.PHONY: test-tool-use
+test-tool-use:
+	$(PYTEST) reasoning/\[tool-use\]-\[langgraph\]-\[ollama\]/tests/ -v
 
+.PHONY: test-react
+test-react:
+	$(PYTEST) reasoning/\[react\]-\[langgraph\]-\[ollama\]/tests/ -v
+
+.PHONY: test-fw-swap
+test-fw-swap:
+	$(PYTEST) topology/\[fw-swap\]-\[crewai\]-\[ollama\]/tests/ -v
+
+.PHONY: test
 test:
-	$(VENV)/bin/pytest -v -m "not integration"
+	$(PYTEST) reasoning/ topology/ decision-econ/ -v
 
-test-all:
-	$(VENV)/bin/pytest -v
+.PHONY: all
+all: tool-use react fw-swap cpcd
 
-clean:
-	rm -rf $(VENV) __pycache__ .pytest_cache
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -name "*.pyc" -delete
-
+.PHONY: help
 help:
-	@echo "Available targets:"
-	@echo "  setup               Create venv and install dependencies"
-	@echo "  run-example1        LangGraph tool-use baseline (Ollama)"
-	@echo "  run-bcbs            BCBS-239 lineage (LangGraph + Ollama)"
-	@echo "  run-bcbs-databricks BCBS-239 lineage (LangGraph + Databricks)"
-	@echo "  run-bcbs-crewai     BCBS-239 lineage (CrewAI + Ollama)"
-	@echo "  run-compare         Decision economics comparison"
-	@echo "  test                Unit tests only"
-	@echo "  test-all            All tests including integration"
-	@echo "  clean               Remove venv and cache"
+	@echo ""
+	@echo "agent-bench — available targets"
+	@echo "────────────────────────────────────────"
+	@echo "  setup        Create venv and install dependencies"
+	@echo "  tool-use     Run reasoning/[tool-use]-[langgraph]-[ollama]"
+	@echo "  react        Run reasoning/[react]-[langgraph]-[ollama]"
+	@echo "  fw-swap      Run topology/[fw-swap]-[crewai]-[ollama]"
+	@echo "  cpcd         Run decision-econ/[cpcd]-[multi]-[ollama]"
+	@echo "  test         Run all tests"
+	@echo "  all          Run all completed examples"
+	@echo "────────────────────────────────────────"
+	@echo ""

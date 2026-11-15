@@ -1,0 +1,4 @@
+example_name: cpcd-multi-framework
+llm_backend:  ollama
+llm_model:    llama3.1:8b
+ollama_host:  http://localhost:11434

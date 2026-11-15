@@ -1,0 +1,25 @@
+criteria:
+  - name:        role_handoff
+    weight:      0.35
+    description: >
+      Each agent's output clearly builds on the previous.
+      Researcher delivers facts; Writer turns them into prose;
+      Editor visibly improves clarity and flow.
+
+  - name:        content_quality
+    weight:      0.30
+    description: >
+      The final blog post is coherent, accurate, well-structured,
+      and appropriate for a general audience.
+
+  - name:        fact_grounding
+    weight:      0.25
+    description: >
+      Claims in the post are supported by facts from the research step;
+      no hallucinated statistics or unsupported assertions.
+
+  - name:        conciseness
+    weight:      0.10
+    description: >
+      The post is appropriately sized (3-4 paragraphs); no filler,
+      padding, or repeated content across sections.

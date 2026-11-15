@@ -1,0 +1,24 @@
+criteria:
+  - name:        adaptive_reasoning
+    weight:      0.40
+    description: >
+      The agent correctly adapted its next action based on what a prior tool
+      returned. For example: if check_availability returned "not available",
+      the agent called get_similar_books rather than stopping.
+
+  - name:        answer_completeness
+    weight:      0.30
+    description: >
+      The final answer addresses every part of the question: book found,
+      availability checked, alternatives provided if unavailable.
+
+  - name:        tool_sequence
+    weight:      0.20
+    description: >
+      The agent called tools in a logical order: search first, then check
+      availability, then suggest alternatives if needed. No redundant calls.
+
+  - name:        conciseness
+    weight:      0.10
+    description: >
+      The answer is clear and direct. No excessive hedging or padding.
