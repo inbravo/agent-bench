@@ -371,3 +371,60 @@
 ---
 
 *Last updated: 2026-11-15*
+
+---
+
+## Adding a New Pattern — File Boilerplate
+
+Every new Python file in this repo must open with the following docstring structure.
+Copy and fill in all fields; do not omit `Description`.
+
+### `agent.py` template
+
+```python
+"""
+agent.py — <Pattern name>: <one-line scenario summary> (<Framework> + <Backend>).
+
+Description : <2–3 sentences. State what agentic pattern is being demonstrated,
+              what the agent does (tools it calls, task it solves), and how the
+              result is measured (rubric / CPCD). Be specific — name the tools
+              and the scenario.>
+
+Pattern     : <Pattern name, e.g. ReAct (Reason + Act)>
+Category    : <Category, e.g. Reasoning Mechanics | Agent Topology | Decision Economics>
+Framework   : <e.g. LangGraph | CrewAI | Multi (LangGraph + CrewAI)>
+Backend     : <e.g. Ollama (local) | Databricks | OpenAI>
+"""
+```
+
+### `tests/test_local.py` template
+
+```python
+"""
+test_local.py — Unit and integration tests for the <Pattern> / <scenario> agent.
+
+Description : <2–3 sentences. State what is being tested — which tools, which
+              mock data structures, and whether the full agent run + rubric scoring
+              is covered. Note the importlib pattern used for bracket-named paths.>
+
+Pattern     : <Pattern name>
+Category    : <Category>
+Framework   : <Framework>
+Backend     : <Backend>
+"""
+```
+
+### `_shared/` utility template
+
+```python
+"""
+<filename>.py — <One-line purpose>.
+
+Description : <2–3 sentences. Explain the module's role in the shared harness,
+              what it provides to agent files, and any key configuration it reads
+              (e.g. config.yaml keys, rubric.yaml structure).>
+
+Module      : Shared utility
+Used by     : All agent.py files
+"""
+```

@@ -1,10 +1,16 @@
 """
 agent.py — Tool Use pattern: weather assistant (LangGraph + Ollama).
 
-Pattern   : Tool Use
-Category  : Reasoning Mechanics
-Framework : LangGraph
-Backend   : Ollama (local)
+Description : Demonstrates the Tool Use agentic pattern by building a weather
+              assistant that calls two mock tools — get_current_weather and
+              convert_temperature. The agent decides which tool to invoke and
+              in what order based on the user query. Scored against a rubric
+              using the CPCD metric (token_cost_usd / quality_score).
+
+Pattern     : Tool Use
+Category    : Reasoning Mechanics
+Framework   : LangGraph
+Backend     : Ollama (local)
 """
 
 # ─────────────────────────────────────────────────────

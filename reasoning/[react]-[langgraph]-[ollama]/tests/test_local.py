@@ -1,4 +1,16 @@
-"""test_local.py — Unit and integration tests for react / book-finder."""
+"""
+test_local.py — Unit and integration tests for the ReAct / book-finder agent.
+
+Description : Verifies tool invocation logic (search_books, check_availability,
+              get_similar_books), MOCK_BOOK_CATALOGUE lookups, and the full agent
+              run against a scored rubric. Uses importlib to load the agent module
+              from its bracket-named folder path.
+
+Pattern     : ReAct (Reason + Act)
+Category    : Reasoning Mechanics
+Framework   : LangGraph
+Backend     : Ollama (local)
+"""
 import sys
 import pytest
 from pathlib import Path

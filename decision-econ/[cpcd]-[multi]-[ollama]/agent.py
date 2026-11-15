@@ -1,12 +1,18 @@
 """
 agent.py — CPCD Decision Economics pattern: multi-framework comparison.
 
-CPCD = token_cost_usd / quality_score
+Description : Benchmarks multiple agentic frameworks side-by-side on the same
+              task and rubric, computing CPCD (token_cost_usd / quality_score)
+              for each candidate. Identifies the most cost-efficient framework
+              by running LangGraph and CrewAI agents sequentially and comparing
+              their quality scores, token costs, and resulting CPCD values.
 
-Pattern   : CPCD / Decision Economics
-Category  : Decision Economics
-Framework : Multi (LangGraph + CrewAI)
-Backend   : Ollama (local)
+CPCD        = token_cost_usd / quality_score
+
+Pattern     : CPCD / Decision Economics
+Category    : Decision Economics
+Framework   : Multi (LangGraph + CrewAI)
+Backend     : Ollama (local)
 """
 
 # ─────────────────────────────────────────────────────

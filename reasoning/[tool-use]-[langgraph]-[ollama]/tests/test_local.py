@@ -1,4 +1,15 @@
-"""test_local.py — Unit and integration tests for tool-use / weather."""
+"""
+test_local.py — Unit and integration tests for the Tool Use / weather-assistant agent.
+
+Description : Verifies tool invocation logic (get_current_weather, convert_temperature),
+              MOCK_WEATHER_DB lookups, and the full agent run against a scored rubric.
+              Uses importlib to load the agent module from its bracket-named folder path.
+
+Pattern     : Tool Use
+Category    : Reasoning Mechanics
+Framework   : LangGraph
+Backend     : Ollama (local)
+"""
 import sys
 import pytest
 from pathlib import Path

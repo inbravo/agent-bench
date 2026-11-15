@@ -1,10 +1,16 @@
 """
 agent.py — Framework Swap pattern: blog post crew (CrewAI + Ollama).
 
-Pattern   : Framework Swap
-Category  : Agent Topology
-Framework : CrewAI
-Backend   : Ollama (local)
+Description : Demonstrates the Framework Swap topology pattern by implementing
+              the same blog-post writing task in CrewAI instead of LangGraph.
+              A two-agent crew (researcher + writer) collaborates via a sequential
+              process, allowing direct CPCD comparison between frameworks on an
+              identical task and rubric.
+
+Pattern     : Framework Swap
+Category    : Agent Topology
+Framework   : CrewAI
+Backend     : Ollama (local)
 """
 
 # ─────────────────────────────────────────────────────

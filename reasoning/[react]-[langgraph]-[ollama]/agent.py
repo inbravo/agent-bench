@@ -1,10 +1,16 @@
 """
 agent.py — ReAct pattern: book finder (LangGraph + Ollama).
 
-Pattern   : ReAct (Reason + Act)
-Category  : Reasoning Mechanics
-Framework : LangGraph
-Backend   : Ollama (local)
+Description : Demonstrates the ReAct (Reason + Act) pattern by building a book
+              finder agent that interleaves reasoning steps with tool calls —
+              search_books, check_availability, and get_similar_books. The agent
+              iterates until it has enough information to answer, then scores the
+              result using the CPCD metric (token_cost_usd / quality_score).
+
+Pattern     : ReAct (Reason + Act)
+Category    : Reasoning Mechanics
+Framework   : LangGraph
+Backend     : Ollama (local)
 """
 
 # ─────────────────────────────────────────────────────

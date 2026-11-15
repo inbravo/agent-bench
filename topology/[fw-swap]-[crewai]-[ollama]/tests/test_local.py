@@ -1,4 +1,15 @@
-"""test_local.py — Unit and integration tests for fw-swap / blog-crew."""
+"""
+test_local.py — Unit and integration tests for the Framework Swap / blog-crew agent.
+
+Description : Verifies FetchFactsTool lookups against MOCK_FACTS_DB, crew construction
+              via build_crew, and the full agent run against a scored rubric. Uses
+              importlib to load the agent module from its bracket-named folder path.
+
+Pattern     : Framework Swap
+Category    : Agent Topology
+Framework   : CrewAI
+Backend     : Ollama (local)
+"""
 import sys
 import pytest
 from pathlib import Path
