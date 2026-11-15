@@ -68,4 +68,18 @@ cutting cost suddenly destroys quality.
 
 ---
 
+---
+
+## References
+
+| Source | What it covers | Link |
+|--------|---------------|------|
+| aiagentrank.io (May 2026) | Per-pattern latency and token-cost trade-offs — the closest published work to CPCD | [aiagentrank.io](https://aiagentrank.io/blog/ai-agent-design-patterns-2026) |
+| Anthropic — Building Effective Agents | Evaluator-optimiser pattern; cost/quality iteration loops | [anthropic.com](https://www.anthropic.com/research/building-effective-agents) |
+| arXiv:2605.13850 (A*STAR, May 2026) | Framework-neutral taxonomy; design trade-off analysis across cognitive and topology axes | [arxiv.org](https://arxiv.org/abs/2605.13850) |
+| Andrew Ng (2024) | Foundational agentic patterns vocabulary referenced throughout the CPCD methodology | [deeplearning.ai](https://www.deeplearning.ai/the-batch/how-agents-can-improve-llm-performance/) |
+| SitePoint Definitive Guide (2026) | Decision framework for pattern selection — complements cost-tier routing | [sitepoint.com](https://www.sitepoint.com/the-definitive-guide-to-agentic-design-patterns-in-2026/) |
+
+> **Note:** CPCD (Cost-Per-Correct-Decision) as a primary benchmark metric is an original contribution of this repository. The references above provide the pattern vocabulary and cost/quality framing that CPCD is built on.
+
 ← [Back to repo root](../README.md) · [Full pattern catalogue](../PATTERNS.md)

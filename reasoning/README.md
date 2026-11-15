@@ -58,4 +58,16 @@ Is one tool call enough?
 
 ---
 
+---
+
+## References
+
+| Source | What it covers | Link |
+|--------|---------------|------|
+| Andrew Ng (2024) | Foundational 4 patterns: Reflection, Tool Use, Planning, Multi-Agent Collaboration | [deeplearning.ai](https://www.deeplearning.ai/the-batch/how-agents-can-improve-llm-performance/) |
+| Anthropic — Building Effective Agents | Workflow patterns: chains, routing, parallelisation, orchestrator-workers, evaluator-optimiser | [anthropic.com](https://www.anthropic.com/research/building-effective-agents) |
+| arXiv:2605.13850 (A*STAR, May 2026) | Two-dimensional framework: Cognitive Function × Execution Topology; synthesises Anthropic, Google, LangChain | [arxiv.org](https://arxiv.org/abs/2605.13850) |
+| aiagentrank.io (May 2026) | 9 patterns with latency and token-cost trade-offs — maps well to CPCD reasoning | [aiagentrank.io](https://aiagentrank.io/blog/ai-agent-design-patterns-2026) |
+| dev.to / Innovatrix (2026) | 7 patterns with 2026 production-readiness scorecard | [dev.to](https://dev.to/emperorakashi20/the-7-agentic-ai-design-patterns-every-developer-should-know-react-reflection-tool-use-and-more-3bba) |
+
 ← [Back to repo root](../README.md) · [Full pattern catalogue](../PATTERNS.md)

@@ -54,4 +54,16 @@ Single agent or multiple?
 
 ---
 
+---
+
+## References
+
+| Source | What it covers | Link |
+|--------|---------------|------|
+| LangChain Multi-Agent Guide | 4 coordination patterns: supervisor, hierarchical, network, handoff | [python.langchain.com](https://python.langchain.com/docs/how_to/multi_agent/) |
+| Anthropic — Building Effective Agents | Orchestrator-workers, parallelisation, and handoff workflow patterns | [anthropic.com](https://www.anthropic.com/research/building-effective-agents) |
+| arXiv:2605.13850 (A*STAR, May 2026) | Execution Topology axis: 6 archetypes including chain, fan-out, supervisor, network | [arxiv.org](https://arxiv.org/abs/2605.13850) |
+| Taskade — 21 Agentic Patterns (2026) | 5 pattern families including topology patterns with diagrams | [taskade.com](https://www.taskade.com/blog/agentic-design-patterns) |
+| SitePoint Definitive Guide (2026) | 6 core patterns with working code and a decision framework | [sitepoint.com](https://www.sitepoint.com/the-definitive-guide-to-agentic-design-patterns-in-2026/) |
+
 ← [Back to repo root](../README.md) · [Full pattern catalogue](../PATTERNS.md)
