@@ -125,7 +125,7 @@ python -m venv .venv
 source .venv/bin/activate
 
 # 3. Install core dependencies
-pip install langgraph langchain-community crewai pyyaml
+pip install -r requirements.txt
 
 # 4. Start Ollama (must be running locally)
 ollama pull llama3.1:8b
