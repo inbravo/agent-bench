@@ -1,0 +1,16 @@
+# Rubric — Prompt Optimisation / Weather Assistant
+# Identical criteria to the reasoning/ Tool Use examples — intentional.
+# This lets CPCD be compared before vs after DSPy optimisation.
+criteria:
+  - name:        tool_selection
+    weight:      0.35
+    description: "Agent called the correct tools in the right order"
+  - name:        answer_accuracy
+    weight:      0.35
+    description: "Temperature value and unit conversion are numerically correct"
+  - name:        completeness
+    weight:      0.20
+    description: "Answer covers all parts of the question"
+  - name:        conciseness
+    weight:      0.10
+    description: "Answer is concise without padding"
