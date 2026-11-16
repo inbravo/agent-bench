@@ -7,33 +7,40 @@
 
 ## Status Tracker
 
-| # | Category | Pattern | Folder | Status |
-|---|---|---|---|---|
-| 1 | Reasoning Mechanics | Tool Use | `reasoning/[tool-use]-[langgraph]-[ollama]` | ✅ Done |
-| 2 | Reasoning Mechanics | ReAct | `reasoning/[react]-[langgraph]-[ollama]` | ✅ Done |
-| 3 | Reasoning Mechanics | ReAct (Databricks) | `reasoning/[react]-[langgraph]-[databricks]` | 🔲 Planned |
-| 4 | Reasoning Mechanics | Reflection | `reasoning/[reflection]-[langgraph]-[ollama]` | 🔲 Planned |
-| 5 | Reasoning Mechanics | Plan-and-Execute | `reasoning/[plan-exec]-[langgraph]-[ollama]` | 🔲 Planned |
-| 6 | Agent Topology | Framework Swap | `topology/[fw-swap]-[crewai]-[ollama]` | ✅ Done |
-| 7 | Agent Topology | Role-Based Crew | `topology/[role-crew]-[crewai]-[ollama]` | 🔲 Planned |
-| 8 | Agent Topology | Orchestrator-Worker | `topology/[orch-worker]-[langgraph]-[ollama]` | 🔲 Planned |
-| 9 | Agent Topology | Parallel Fan-out | `topology/[fan-out]-[langgraph]-[ollama]` | 🔲 Planned |
-| 10 | Tool & Context Integration | MCP Tools | `context-integration/[mcp-tools]-[langgraph]-[ollama]` | 🔲 Planned |
-| 11 | Tool & Context Integration | RAG-as-Tool | `context-integration/[rag-tool]-[langgraph]-[ollama]` | 🔲 Planned |
-| 12 | Tool & Context Integration | Memory | `context-integration/[memory]-[langgraph]-[ollama]` | 🔲 Planned |
-| 13 | Evaluation & Observability | LLM-as-Judge | `evaluation/[llm-judge]-[multi]-[ollama]` | 🔲 Planned |
-| 14 | Evaluation & Observability | Trace-and-Score | `evaluation/[trace-score]-[langgraph]-[ollama]` | 🔲 Planned |
-| 15 | Decision Economics | CPCD | `decision-econ/[cpcd]-[multi]-[ollama]` | ✅ Done |
-| 16 | Decision Economics | Pareto Frontier | `decision-econ/[pareto]-[multi]-[ollama]` | 🔲 Planned |
-| 17 | Decision Economics | Decision Budget | `decision-econ/[budget]-[langgraph]-[ollama]` | 🔲 Planned |
-| 18 | Decision Economics | Cost-Tier Routing | `decision-econ/[tier-routing]-[langgraph]-[ollama]` | 🔲 Planned |
-| 19 | Decision Economics | Degradation Curve | `decision-econ/[degrad-curve]-[multi]-[ollama]` | 🔲 Planned |
-| 20 | Safety, Control & Governance | HITL | `governance/[hitl]-[langgraph]-[ollama]` | 🔲 Planned |
-| 21 | Safety, Control & Governance | Guardrails | `governance/[guardrails]-[langgraph]-[ollama]` | 🔲 Planned |
-| 22 | Safety, Control & Governance | Adversarial Stress | `governance/[adversarial]-[langgraph]-[ollama]` | 🔲 Planned |
-| 23 | Deployment & Backend Portability | Backend Swap | `portability/[backend-swap]-[langgraph]-[multi]` | 🔲 Planned |
-| 24 | Deployment & Backend Portability | Framework Swap (compare) | `portability/[fw-compare]-[multi]-[ollama]` | 🔲 Planned |
-| 25 | Deployment & Backend Portability | Model Fallback Chain | `portability/[fallback]-[langgraph]-[multi]` | 🔲 Planned |
+| # | Category | Pattern | Framework | Folder | Status |
+|---|---|---|---|---|---|
+| 1 | Reasoning Mechanics | Tool Use | LangGraph | `reasoning/[tool-use]-[langgraph]-[ollama]` | ✅ Done |
+| 2 | Reasoning Mechanics | Tool Use | CrewAI | `reasoning/[tool-use]-[crewai]-[ollama]` | ✅ Done |
+| 3 | Reasoning Mechanics | Tool Use | AG2 | `reasoning/[tool-use]-[ag2]-[ollama]` | ✅ Done |
+| 4 | Reasoning Mechanics | ReAct | LangGraph | `reasoning/[react]-[langgraph]-[ollama]` | ✅ Done |
+| 5 | Reasoning Mechanics | ReAct | CrewAI | `reasoning/[react]-[crewai]-[ollama]` | ✅ Done |
+| 6 | Reasoning Mechanics | ReAct | AG2 | `reasoning/[react]-[ag2]-[ollama]` | ✅ Done |
+| 7 | Reasoning Mechanics | ReAct (Databricks) | LangGraph | `reasoning/[react]-[langgraph]-[databricks]` | 🔲 Planned |
+| 8 | Reasoning Mechanics | Reflection | LangGraph | `reasoning/[reflection]-[langgraph]-[ollama]` | 🔲 Planned |
+| 9 | Reasoning Mechanics | Plan-and-Execute | LangGraph | `reasoning/[plan-exec]-[langgraph]-[ollama]` | 🔲 Planned |
+| 10 | Agent Topology | Framework Swap | CrewAI | `topology/[fw-swap]-[crewai]-[ollama]` | ✅ Done |
+| 11 | Agent Topology | Role-Based Crew | CrewAI | `topology/[role-crew]-[crewai]-[ollama]` | 🔲 Planned |
+| 12 | Agent Topology | Orchestrator-Worker | LangGraph | `topology/[orch-worker]-[langgraph]-[ollama]` | 🔲 Planned |
+| 13 | Agent Topology | Parallel Fan-out | LangGraph | `topology/[fan-out]-[langgraph]-[ollama]` | 🔲 Planned |
+| 14 | Tool & Context Integration | MCP Tools | LangGraph | `context-integration/[mcp-tools]-[langgraph]-[ollama]` | 🔲 Planned |
+| 15 | Tool & Context Integration | RAG-as-Tool | LangGraph | `context-integration/[rag-tool]-[langgraph]-[ollama]` | 🔲 Planned |
+| 16 | Tool & Context Integration | Memory | LangGraph | `context-integration/[memory]-[langgraph]-[ollama]` | 🔲 Planned |
+| 17 | Evaluation & Observability | LLM-as-Judge | Multi | `evaluation/[llm-judge]-[multi]-[ollama]` | 🔲 Planned |
+| 18 | Evaluation & Observability | Trace-and-Score | LangGraph | `evaluation/[trace-score]-[langgraph]-[ollama]` | 🔲 Planned |
+| 19 | Decision Economics | CPCD | Multi | `decision-econ/[cpcd]-[multi]-[ollama]` | ✅ Done |
+| 20 | Decision Economics | Pareto Frontier | Multi | `decision-econ/[pareto]-[multi]-[ollama]` | 🔲 Planned |
+| 21 | Decision Economics | Decision Budget | LangGraph | `decision-econ/[budget]-[langgraph]-[ollama]` | 🔲 Planned |
+| 22 | Decision Economics | Cost-Tier Routing | LangGraph | `decision-econ/[tier-routing]-[langgraph]-[ollama]` | 🔲 Planned |
+| 23 | Decision Economics | Degradation Curve | Multi | `decision-econ/[degrad-curve]-[multi]-[ollama]` | 🔲 Planned |
+| 24 | Safety, Control & Governance | HITL | LangGraph | `governance/[hitl]-[langgraph]-[ollama]` | 🔲 Planned |
+| 25 | Safety, Control & Governance | Guardrails | LangGraph | `governance/[guardrails]-[langgraph]-[ollama]` | 🔲 Planned |
+| 26 | Safety, Control & Governance | Adversarial Stress | LangGraph | `governance/[adversarial]-[langgraph]-[ollama]` | 🔲 Planned |
+| 27 | Deployment & Backend Portability | Backend Swap | LangGraph | `portability/[backend-swap]-[langgraph]-[multi]` | 🔲 Planned |
+| 28 | Deployment & Backend Portability | Framework Swap (compare) | Multi | `portability/[fw-compare]-[multi]-[ollama]` | 🔲 Planned |
+| 29 | Deployment & Backend Portability | Model Fallback Chain | LangGraph | `portability/[fallback]-[langgraph]-[multi]` | 🔲 Planned |
+| 30 | Self-Improvement | Prompt Optimisation | DSPy | `self-improvement/[prompt-opt]-[dspy]-[ollama]` | ✅ Done |
+| 31 | Self-Improvement | Self-Critique | ollama-harness | `self-improvement/[research-swarm]-[ollama-harness]-[ollama]` | ✅ Done |
+| 32 | Self-Improvement | Recursive Harness Opt | harness² | `self-improvement/[harness-opt]-[harness2]-[vertexai]` | 🔲 Planned |
 
 **Legend**: ✅ Done · 🔲 Planned · 🚧 In Progress
 
@@ -370,7 +377,70 @@
 
 ---
 
-*Last updated: 2026-11-15*
+*Last updated: 2026-11-16*
+
+---
+
+## 8 · Self-Improvement
+
+> *How does an agent get better at a task without manual prompt engineering?*
+
+**New CPCD axis**: `CPCD_delta = CPCD_before − CPCD_after`
+Does the cost of optimisation produce a measurable quality gain?
+
+### Prompt Optimisation (DSPy / BootstrapFewShot)
+
+**What it is**: Treats prompts as learnable parameters. A `BootstrapFewShot`
+optimiser generates labelled demonstrations from a small training set, then
+recompiles the agent's prompt to include the highest-scoring examples.
+Improvement is **batch / offline** — optimise once, then deploy.
+
+**Scenario**: DSPy ReAct over the same weather task as `reasoning/`. The agent
+runs before and after `optimiser.compile()`; CPCD_delta measures the gain.
+
+**When NOT to use it**:
+- When you have no labelled training examples (need at least 3–10)
+- When the task changes frequently — compiled demos go stale
+- When the LLM is frozen / API-only and you can't run DSPy's teleprompter
+- When latency at compile time (many LLM calls) is unacceptable
+
+---
+
+### Self-Critique (ollama-harness / Producer-Critique Loop)
+
+**What it is**: An online, **per-query** revision loop. A producer LLM generates
+an answer; a critic LLM says `ACCEPT` or `REVISE: <improved>`. The loop runs up
+to `max_revisions` times. No training data needed — the critic evaluates the
+answer directly against the task.
+
+**Scenario**: ollama-harness producer-critique loop on the weather task.
+`harness_mode: "native"` (ollama-harness pip) or `"fallback"` (stdlib urllib).
+
+**When NOT to use it**:
+- When every query has a clear deterministic answer — critique adds no value
+- When latency is tight — each revision doubles the LLM calls
+- When the critic and producer use the same model with the same system prompt —
+  they will agree unconditionally, defeating the loop
+- When quality threshold is set too low — the loop exits immediately
+
+---
+
+### Recursive Harness Optimisation (harness²)
+
+**What it is**: A meta-optimiser that wraps an entire benchmark harness.
+Across multiple task runs it learns which prompt variants, tool orderings, or
+agent configurations produce the lowest CPCD, then rewrites the harness itself.
+Improvement is **across tasks** — the harness improves as more tasks are run.
+
+**Scenario**: *(Planned)* — harness² running over the weather + book tasks,
+rewriting agent configs to minimise cumulative CPCD.
+
+**When NOT to use it**:
+- When you have only one task — the meta-optimiser needs a task distribution
+- When Vertex AI / Google AI is not available in your environment
+- When the harness is not structured as parameterisable YAML configs
+
+---
 
 ---
 

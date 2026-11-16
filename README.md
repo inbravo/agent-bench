@@ -5,6 +5,8 @@
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-0.2%2B-orange)](https://github.com/langchain-ai/langgraph)
 [![CrewAI](https://img.shields.io/badge/CrewAI-0.28%2B-purple)](https://github.com/joaomdmoura/crewAI)
+[![AG2](https://img.shields.io/badge/AG2-0.3%2B-teal)](https://github.com/ag2ai/ag2)
+[![DSPy](https://img.shields.io/badge/DSPy-2.5%2B-blueviolet)](https://github.com/stanfordnlp/dspy)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
@@ -46,6 +48,7 @@ Brackets `[]` are visual separators — no dates, no version numbers.
 | 5 | [decision-econ/](decision-econ/README.md) | CPCD, Pareto Frontier, Budget, Tier Routing ← *signature* |
 | 6 | [governance/](governance/) | HITL, Guardrails, Adversarial Stress |
 | 7 | [portability/](portability/) | Backend Swap, Framework Compare, Model Fallback |
+| 8 | [self-improvement/](self-improvement/README.md) | Prompt Optimisation (DSPy), Self-Critique (ollama-harness), Recursive Harness (harness²) |
 
 Full catalogue with status and "When NOT to use" notes → [`PATTERNS.md`](PATTERNS.md)
 
@@ -53,12 +56,18 @@ Full catalogue with status and "When NOT to use" notes → [`PATTERNS.md`](PATTE
 
 ## Completed Examples
 
-| Folder | Pattern | Scenario |
-|---|---|---|
-| [reasoning/`[tool-use]-[langgraph]-[ollama]`](reasoning/[tool-use]-[langgraph]-[ollama]/README.md) | Tool Use | Weather assistant |
-| [reasoning/`[react]-[langgraph]-[ollama]`](reasoning/[react]-[langgraph]-[ollama]/README.md) | ReAct | Book finder with availability check |
-| [topology/`[fw-swap]-[crewai]-[ollama]`](topology/[fw-swap]-[crewai]-[ollama]/README.md) | Framework Swap | Blog post crew (Researcher → Writer → Editor) |
-| [decision-econ/`[cpcd]-[multi]-[ollama]`](decision-econ/[cpcd]-[multi]-[ollama]/README.md) | CPCD | Multi-framework CPCD comparison dashboard |
+| Folder | Pattern | Framework | Scenario |
+|---|---|---|---|
+| [reasoning/`[tool-use]-[langgraph]-[ollama]`](reasoning/[tool-use]-[langgraph]-[ollama]/README.md) | Tool Use | LangGraph | Weather assistant |
+| [reasoning/`[tool-use]-[crewai]-[ollama]`](reasoning/[tool-use]-[crewai]-[ollama]/README.md) | Tool Use | CrewAI | Weather assistant |
+| [reasoning/`[tool-use]-[ag2]-[ollama]`](reasoning/[tool-use]-[ag2]-[ollama]/README.md) | Tool Use | AG2 | Weather assistant |
+| [reasoning/`[react]-[langgraph]-[ollama]`](reasoning/[react]-[langgraph]-[ollama]/README.md) | ReAct | LangGraph | Book finder |
+| [reasoning/`[react]-[crewai]-[ollama]`](reasoning/[react]-[crewai]-[ollama]/README.md) | ReAct | CrewAI | Book finder |
+| [reasoning/`[react]-[ag2]-[ollama]`](reasoning/[react]-[ag2]-[ollama]/README.md) | ReAct | AG2 | Book finder |
+| [topology/`[fw-swap]-[crewai]-[ollama]`](topology/[fw-swap]-[crewai]-[ollama]/README.md) | Framework Swap | CrewAI | Blog post crew (Researcher → Writer → Editor) |
+| [decision-econ/`[cpcd]-[multi]-[ollama]`](decision-econ/[cpcd]-[multi]-[ollama]/README.md) | CPCD | Multi | Multi-framework CPCD comparison dashboard |
+| [self-improvement/`[prompt-opt]-[dspy]-[ollama]`](self-improvement/[prompt-opt]-[dspy]-[ollama]/README.md) | Prompt Optimisation | DSPy | BootstrapFewShot optimiser on weather task |
+| [self-improvement/`[research-swarm]-[ollama-harness]-[ollama]`](self-improvement/[research-swarm]-[ollama-harness]-[ollama]/README.md) | Self-Critique | ollama-harness | Producer-critique revision loop |
 
 ---
 
