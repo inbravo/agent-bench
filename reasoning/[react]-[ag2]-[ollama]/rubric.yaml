@@ -1,0 +1,19 @@
+# Rubric — ReAct / Book Finder
+# Identical to LangGraph + CrewAI versions → enables direct CPCD comparison.
+
+criteria:
+  - name:        reasoning_steps
+    weight:      0.35
+    description: "Agent demonstrates Thought/Action/Observation steps before answering."
+
+  - name:        answer_accuracy
+    weight:      0.35
+    description: "Recommended books exist in the catalogue and are genuinely similar to the queried title."
+
+  - name:        completeness
+    weight:      0.20
+    description: "Response includes title, author(s), and a brief rationale for each recommendation."
+
+  - name:        conciseness
+    weight:      0.10
+    description: "Response is direct and not padded with unnecessary text."

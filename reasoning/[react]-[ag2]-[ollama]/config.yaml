@@ -1,0 +1,17 @@
+# ─────────────────────────────────────────────────────
+# Example   : react-books-ag2
+# Pattern   : ReAct (Reason + Act)
+# Framework : AG2  (pip install ag2)
+# Backend   : Ollama (local)
+# ─────────────────────────────────────────────────────
+
+example_name: react-books-ag2
+llm_backend:  ollama
+llm_model:    llama3.1:8b
+ollama_host:  http://localhost:11434
+
+scorer:
+  judge_model: llama3.1:8b
+  input_rate:  0.0          # local model — no cost
+  output_rate: 0.0
+  rubric_path: rubric.yaml

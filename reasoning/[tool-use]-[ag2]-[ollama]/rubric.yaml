@@ -1,0 +1,19 @@
+# Rubric — Tool Use / Weather Assistant
+# Identical to LangGraph + CrewAI versions → enables direct CPCD comparison.
+
+criteria:
+  - name:        tool_selection
+    weight:      0.35
+    description: "Agent called the correct tool(s) in the correct order."
+
+  - name:        answer_accuracy
+    weight:      0.35
+    description: "Numeric temperature value is factually correct per MOCK_WEATHER_DB."
+
+  - name:        completeness
+    weight:      0.20
+    description: "Answer addresses every part of the question (city, value, unit)."
+
+  - name:        conciseness
+    weight:      0.10
+    description: "Response is direct and not padded with unnecessary text."

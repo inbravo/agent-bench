@@ -10,13 +10,17 @@ capability in isolation.
 
 ## Patterns
 
-| Folder | Pattern | Scenario | Status |
-|---|---|---|---|
-| [`[tool-use]-[langgraph]-[ollama]`]([tool-use]-[langgraph]-[ollama]/README.md) | Tool Use | Weather assistant | ✅ Done |
-| [`[react]-[langgraph]-[ollama]`]([react]-[langgraph]-[ollama]/README.md) | ReAct | Book finder with availability check | ✅ Done |
-| `[react]-[langgraph]-[databricks]` | ReAct | Same book finder, Databricks backend | 🔲 Planned |
-| `[reflection]-[langgraph]-[ollama]` | Reflection | Agent critiques and rewrites its own output | 🔲 Planned |
-| `[plan-exec]-[langgraph]-[ollama]` | Plan-and-Execute | Planner + executor split for multi-step tasks | 🔲 Planned |
+| Folder | Pattern | Framework | Scenario | Status |
+|---|---|---|---|---|
+| [`[tool-use]-[langgraph]-[ollama]`]([tool-use]-[langgraph]-[ollama]/README.md) | Tool Use | LangGraph | Weather assistant | ✅ Done |
+| [`[tool-use]-[crewai]-[ollama]`]([tool-use]-[crewai]-[ollama]/README.md) | Tool Use | CrewAI | Weather assistant | ✅ Done |
+| [`[tool-use]-[ag2]-[ollama]`]([tool-use]-[ag2]-[ollama]/README.md) | Tool Use | AG2 | Weather assistant | ✅ Done |
+| [`[react]-[langgraph]-[ollama]`]([react]-[langgraph]-[ollama]/README.md) | ReAct | LangGraph | Book finder | ✅ Done |
+| [`[react]-[crewai]-[ollama]`]([react]-[crewai]-[ollama]/README.md) | ReAct | CrewAI | Book finder | ✅ Done |
+| [`[react]-[ag2]-[ollama]`]([react]-[ag2]-[ollama]/README.md) | ReAct | AG2 | Book finder | ✅ Done |
+| `[react]-[langgraph]-[databricks]` | ReAct | LangGraph | Book finder, Databricks backend | 🔲 Planned |
+| `[reflection]-[langgraph]-[ollama]` | Reflection | LangGraph | Agent critiques and rewrites its own output | 🔲 Planned |
+| `[plan-exec]-[langgraph]-[ollama]` | Plan-and-Execute | LangGraph | Planner + executor split for multi-step tasks | 🔲 Planned |
 
 ---
 
