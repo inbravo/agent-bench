@@ -1,0 +1,25 @@
+criteria:
+  - name:        tool_selection
+    weight:      0.35
+    description: >
+      The agent called the correct tool(s) for the question asked.
+      get_current_weather for temperature queries;
+      convert_temperature when a unit conversion was needed.
+
+  - name:        answer_accuracy
+    weight:      0.35
+    description: >
+      The numerical values and unit labels in the answer match what the
+      mock database would return for the requested city and unit.
+
+  - name:        completeness
+    weight:      0.20
+    description: >
+      The answer addresses every part of the user's question.
+      If both current temperature and a conversion were asked, both appear.
+
+  - name:        conciseness
+    weight:      0.10
+    description: >
+      The answer is direct and free of unnecessary padding.
+      No apologies, no lengthy caveats, no repetition.

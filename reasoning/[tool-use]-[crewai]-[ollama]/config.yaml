@@ -1,0 +1,10 @@
+example_name: tool-use-weather-crewai
+llm_backend: ollama
+llm_model:   llama3.1:8b
+ollama_host: http://localhost:11434
+
+scorer:
+  judge_model: llama3.1:8b
+  input_rate:  0.0
+  output_rate: 0.0
+  rubric_path: rubric.yaml
