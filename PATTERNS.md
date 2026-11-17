@@ -41,6 +41,9 @@
 | 30 | Self-Improvement | Prompt Optimisation | DSPy | `self-improvement/[prompt-opt]-[dspy]-[ollama]` | ✅ Done |
 | 31 | Self-Improvement | Self-Critique | ollama-harness | `self-improvement/[research-swarm]-[ollama-harness]-[ollama]` | ✅ Done |
 | 32 | Self-Improvement | Recursive Harness Opt | harness² | `self-improvement/[harness-opt]-[harness2]-[vertexai]` | 🔲 Planned |
+| 33 | Reasoning Mechanics | Chain-of-Verification (CoVe) | LangGraph | `reasoning/[cove]-[langgraph]-[ollama]` | 🔲 Planned |
+| 34 | Safety, Control & Governance | Dry-Run (Approval Gate) | LangGraph | `governance/[dry-run]-[langgraph]-[ollama]` | 🔲 Planned |
+| 35 | Tool & Context Integration | GraphRAG | LangGraph | `context-integration/[graphrag]-[langgraph]-[ollama]` | 🔲 Planned |
 
 **Legend**: ✅ Done · 🔲 Planned · 🚧 In Progress
 
@@ -99,6 +102,20 @@
 - When the plan cannot be known upfront — use ReAct
 - When steps are highly interdependent and unpredictable — ReAct adapts better
 - When the task is a single action — no plan needed
+
+---
+
+### Chain-of-Verification (CoVe)
+
+**What it is**: The agent generates a baseline answer, decomposes it into a checklist of verifiable claims, verifies each claim independently (via tool call or LLM re-query), then revises the answer to remove any claim that failed verification.
+
+**Scenario**: *(Planned)* — BCBS 239 data quality checker: generate a data lineage summary, extract each traceability claim, verify each claim against source metadata, revise the report
+
+**When NOT to use it**:
+- When the task has a single atomic answer that cannot be decomposed into claims
+- When you have no verification mechanism (no tools, no second-pass LLM) — the loop is hollow
+- When all claims are equally unverifiable — a standard ReAct loop is simpler
+- When latency is critical — CoVe runs N+1 LLM calls for N claims
 
 ---
 
@@ -197,6 +214,20 @@
 - When every session is stateless by design
 - When memory growth is unbounded and no pruning strategy exists
 - When stored memory is sensitive and no access control is in place
+
+---
+
+### GraphRAG
+
+**What it is**: Retrieval is performed over a knowledge graph rather than a flat vector index. Entities (people, systems, regulations) and their relationships are stored as nodes and edges. The agent traverses the graph to retrieve structured, relationship-aware context — not just similar chunks.
+
+**Scenario**: *(Planned)* — BCBS 239 data lineage agent: knowledge graph of source systems → transformations → reports; agent traverses lineage paths to answer "which upstream systems affect this regulatory figure?"
+
+**When NOT to use it**:
+- When your knowledge base has no meaningful entity relationships — plain RAG is simpler
+- When the graph is too sparse (fewer than ~50 entities) — overhead exceeds benefit
+- When graph construction cost is prohibitive and the knowledge base changes frequently
+- When you need sub-second retrieval — graph traversal is slower than ANN vector search
 
 ---
 
@@ -337,6 +368,20 @@
 
 ---
 
+### Dry-Run (Approval Gate)
+
+**What it is**: The agent proposes an action, simulates its effect without executing it, presents the proposal to a human (or policy engine), and waits for explicit approval before proceeding. The agentic equivalent of a four-eyes principle.
+
+**Scenario**: *(Planned)* — regulatory report submission agent: drafts the COREP filing, presents a diff of what will change, waits for Compliance sign-off before submitting
+
+**When NOT to use it**:
+- When all actions are fully reversible and low-risk — approval gates add latency
+- When the agent is running in real-time with no human available — use Guardrails instead
+- When every step requires approval — the agent loses autonomy entirely; scope approval to high-impact steps only
+- When simulation is not possible (external side-effects cannot be safely dry-run)
+
+---
+
 ## 7 · Deployment & Backend Portability
 
 > *How easily can the agent move across models, frameworks, and infrastructure?*
@@ -377,7 +422,7 @@
 
 ---
 
-*Last updated: 2026-11-16*
+*Last updated: 2026-11-17*
 
 ---
 

@@ -4,7 +4,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Patterns](https://img.shields.io/badge/patterns-32-brightgreen)](#categories)
+[![Patterns](https://img.shields.io/badge/patterns-35-brightgreen)](#categories)
 [![Examples](https://img.shields.io/badge/examples-10%20done-blue)](#completed-examples)
 
 ---
@@ -58,12 +58,12 @@ Brackets `[]` are visual separators — no dates, no version numbers.
 
 | # | Folder | Description |
 |---|---|---|
-| 1 | [reasoning/](reasoning/README.md) | Tool Use, ReAct, Reflection, Plan-and-Execute |
+| 1 | [reasoning/](reasoning/README.md) | Tool Use, ReAct, Reflection, Plan-and-Execute, Chain-of-Verification |
 | 2 | [topology/](topology/README.md) | Framework Swap, Role Crew, Orchestrator-Worker, Fan-out |
-| 3 | [context-integration/](context-integration/) | MCP Tools, RAG-as-Tool, Memory |
+| 3 | [context-integration/](context-integration/) | MCP Tools, RAG-as-Tool, Memory, GraphRAG |
 | 4 | [evaluation/](evaluation/) | LLM-as-Judge, Trace-and-Score |
 | 5 | [decision-econ/](decision-econ/README.md) | CPCD, Pareto Frontier, Budget, Tier Routing ← *signature* |
-| 6 | [governance/](governance/) | HITL, Guardrails, Adversarial Stress |
+| 6 | [governance/](governance/) | HITL, Guardrails, Adversarial Stress, Dry-Run (Approval Gate) |
 | 7 | [portability/](portability/) | Backend Swap, Framework Compare, Model Fallback |
 | 8 | [self-improvement/](self-improvement/README.md) | Prompt Optimisation (DSPy), Self-Critique (ollama-harness), Recursive Harness (harness²) |
 
@@ -150,7 +150,7 @@ sys.path.insert(0, str(Path(__file__).parents[2] / "_shared"))   # shared utils
 
 ## See Also
 
-- [`PATTERNS.md`](PATTERNS.md) — full catalogue: 32 patterns, status tracker, "When NOT to use it"
+- [`PATTERNS.md`](PATTERNS.md) — full catalogue: 35 patterns, status tracker, "When NOT to use it"
 - [`context-lab`](https://github.com/inbravo/context-lab) — companion repo for context engineering and RAG
 
 ---
