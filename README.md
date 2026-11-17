@@ -14,7 +14,7 @@
 ## What Is This Repo?
 
 A structured collection of **agentic design pattern examples** across multiple
-frameworks (LangGraph, CrewAI, Databricks Mosaic AI, OpenAI SDK, Claude SDK),
+frameworks (LangGraph, CrewAI, AG2, DSPy — Databricks, OpenAI SDK, and Claude SDK planned),
 all benchmarked on a single axis:
 
 ```
@@ -23,6 +23,14 @@ CPCD = token_cost_usd / quality_score
 
 **Cost-Per-Correct-Decision (CPCD)** is the primary metric. Lower is better.
 It answers: *Is the smarter (more expensive) agent actually worth it?*
+
+For the **self-improvement** category a second axis is tracked:
+
+```
+CPCD_delta = CPCD_before − CPCD_after
+```
+
+It answers: *Does the cost of optimisation produce a measurable quality gain?*
 
 ---
 
@@ -82,7 +90,7 @@ cd agent-bench
 python -m venv .venv
 source .venv/bin/activate
 
-# 3. Install core dependencies
+# 3. Install core dependencies (includes langgraph, crewai, ag2, dspy-ai, ollama)
 pip install -r requirements.txt
 
 # 4. Start Ollama (must be running locally)
@@ -116,7 +124,7 @@ sys.path.insert(0, str(Path(__file__).parents[2] / "_shared"))   # shared utils
 
 ## See Also
 
-- [`PATTERNS.md`](PATTERNS.md) — full catalogue: 25 patterns, status tracker, "When NOT to use it"
+- [`PATTERNS.md`](PATTERNS.md) — full catalogue: 32 patterns, status tracker, "When NOT to use it"
 - [`context-lab`](https://github.com/inbravo/context-lab) — companion repo for context engineering and RAG
 
 ---
