@@ -1,36 +1,45 @@
 # agent-bench
 
-> **Agentic AI framework benchmarking — decision economics at the core**
+> **A pattern-first benchmark for agentic AI — measure every design decision by its cost and quality**
 
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
-[![LangGraph](https://img.shields.io/badge/LangGraph-0.2%2B-orange)](https://github.com/langchain-ai/langgraph)
-[![CrewAI](https://img.shields.io/badge/CrewAI-0.28%2B-purple)](https://github.com/joaomdmoura/crewAI)
-[![AG2](https://img.shields.io/badge/AG2-0.3%2B-teal)](https://github.com/ag2ai/ag2)
-[![DSPy](https://img.shields.io/badge/DSPy-2.5%2B-blueviolet)](https://github.com/stanfordnlp/dspy)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Patterns](https://img.shields.io/badge/patterns-32-brightgreen)](#categories)
+[![Examples](https://img.shields.io/badge/examples-10%20done-blue)](#completed-examples)
 
 ---
 
-## What Is This Repo?
+## Why Design Patterns for Agentic AI?
 
-A structured collection of **agentic design pattern examples** across multiple
-frameworks (LangGraph, CrewAI, AG2, DSPy — Databricks, OpenAI SDK, and Claude SDK planned),
-all benchmarked on a single axis:
+Agentic systems fail in predictable ways — and almost never because of the
+underlying model. They fail because of **architectural choices**: the wrong
+reasoning loop, a topology that creates bottlenecks, tools that are called
+when they shouldn't be, or an optimisation that costs more than it saves.
+Design patterns give those choices names, structure, and a repeatable shape.
+Once a pattern is named it can be measured, compared, and improved.
 
-```
-CPCD = token_cost_usd / quality_score
-```
-
-**Cost-Per-Correct-Decision (CPCD)** is the primary metric. Lower is better.
-It answers: *Is the smarter (more expensive) agent actually worth it?*
-
-For the **self-improvement** category a second axis is tracked:
+That is what this repo does. Each folder is one pattern, implemented once per
+framework so the *same architectural decision* can be compared across different
+tech stacks on a single axis:
 
 ```
-CPCD_delta = CPCD_before − CPCD_after
+CPCD = token_cost_usd / quality_score   ← Cost-Per-Correct-Decision
+```
+
+**Lower CPCD is better.** It answers: *Is the smarter (more expensive) agent
+actually worth it for this specific task?*
+
+For patterns that optimise themselves, a second axis is tracked:
+
+```
+CPCD_delta = CPCD_before − CPCD_after   ← Self-Improvement ROI
 ```
 
 It answers: *Does the cost of optimisation produce a measurable quality gain?*
+
+The frameworks — LangGraph, CrewAI, AG2, DSPy, and others planned — are
+**interchangeable implementations** of the patterns, not the subject of study.
+The patterns are.
 
 ---
 
@@ -64,18 +73,18 @@ Full catalogue with status and "When NOT to use" notes → [`PATTERNS.md`](PATTE
 
 ## Completed Examples
 
-| Folder | Pattern | Framework | Scenario |
+| Folder | Pattern | Scenario | Framework |
 |---|---|---|---|
-| [reasoning/`[tool-use]-[langgraph]-[ollama]`](reasoning/[tool-use]-[langgraph]-[ollama]/README.md) | Tool Use | LangGraph | Weather assistant |
-| [reasoning/`[tool-use]-[crewai]-[ollama]`](reasoning/[tool-use]-[crewai]-[ollama]/README.md) | Tool Use | CrewAI | Weather assistant |
-| [reasoning/`[tool-use]-[ag2]-[ollama]`](reasoning/[tool-use]-[ag2]-[ollama]/README.md) | Tool Use | AG2 | Weather assistant |
-| [reasoning/`[react]-[langgraph]-[ollama]`](reasoning/[react]-[langgraph]-[ollama]/README.md) | ReAct | LangGraph | Book finder |
-| [reasoning/`[react]-[crewai]-[ollama]`](reasoning/[react]-[crewai]-[ollama]/README.md) | ReAct | CrewAI | Book finder |
-| [reasoning/`[react]-[ag2]-[ollama]`](reasoning/[react]-[ag2]-[ollama]/README.md) | ReAct | AG2 | Book finder |
-| [topology/`[fw-swap]-[crewai]-[ollama]`](topology/[fw-swap]-[crewai]-[ollama]/README.md) | Framework Swap | CrewAI | Blog post crew (Researcher → Writer → Editor) |
-| [decision-econ/`[cpcd]-[multi]-[ollama]`](decision-econ/[cpcd]-[multi]-[ollama]/README.md) | CPCD | Multi | Multi-framework CPCD comparison dashboard |
-| [self-improvement/`[prompt-opt]-[dspy]-[ollama]`](self-improvement/[prompt-opt]-[dspy]-[ollama]/README.md) | Prompt Optimisation | DSPy | BootstrapFewShot optimiser on weather task |
-| [self-improvement/`[research-swarm]-[ollama-harness]-[ollama]`](self-improvement/[research-swarm]-[ollama-harness]-[ollama]/README.md) | Self-Critique | ollama-harness | Producer-critique revision loop |
+| [reasoning/`[tool-use]-[langgraph]-[ollama]`](reasoning/[tool-use]-[langgraph]-[ollama]/README.md) | Tool Use | Weather assistant | LangGraph |
+| [reasoning/`[tool-use]-[crewai]-[ollama]`](reasoning/[tool-use]-[crewai]-[ollama]/README.md) | Tool Use | Weather assistant | CrewAI |
+| [reasoning/`[tool-use]-[ag2]-[ollama]`](reasoning/[tool-use]-[ag2]-[ollama]/README.md) | Tool Use | Weather assistant | AG2 |
+| [reasoning/`[react]-[langgraph]-[ollama]`](reasoning/[react]-[langgraph]-[ollama]/README.md) | ReAct | Book finder | LangGraph |
+| [reasoning/`[react]-[crewai]-[ollama]`](reasoning/[react]-[crewai]-[ollama]/README.md) | ReAct | Book finder | CrewAI |
+| [reasoning/`[react]-[ag2]-[ollama]`](reasoning/[react]-[ag2]-[ollama]/README.md) | ReAct | Book finder | AG2 |
+| [topology/`[fw-swap]-[crewai]-[ollama]`](topology/[fw-swap]-[crewai]-[ollama]/README.md) | Framework Swap | Blog post crew (Researcher → Writer → Editor) | CrewAI |
+| [decision-econ/`[cpcd]-[multi]-[ollama]`](decision-econ/[cpcd]-[multi]-[ollama]/README.md) | CPCD | Multi-framework CPCD comparison dashboard | Multi |
+| [self-improvement/`[prompt-opt]-[dspy]-[ollama]`](self-improvement/[prompt-opt]-[dspy]-[ollama]/README.md) | Prompt Optimisation | BootstrapFewShot optimiser on weather task | DSPy |
+| [self-improvement/`[research-swarm]-[ollama-harness]-[ollama]`](self-improvement/[research-swarm]-[ollama-harness]-[ollama]/README.md) | Self-Critique | Producer-critique revision loop | ollama-harness |
 
 ---
 
@@ -102,6 +111,23 @@ python reasoning/\[tool-use\]-\[langgraph\]-\[ollama\]/agent.py
 # 6. Run the CPCD comparison
 python decision-econ/\[cpcd\]-\[multi\]-\[ollama\]/agent.py
 ```
+
+---
+
+## Implementations
+
+The same patterns are implemented across multiple frameworks. The framework is
+a variable — swap it via `config.yaml` without changing pattern logic.
+
+| Framework | Install | Notes |
+|---|---|---|
+| [LangGraph](https://github.com/langchain-ai/langgraph) [![](https://img.shields.io/badge/LangGraph-0.2%2B-orange)](https://github.com/langchain-ai/langgraph) | `pip install langgraph` | Graph-based; explicit state and edges |
+| [CrewAI](https://github.com/joaomdmoura/crewAI) [![](https://img.shields.io/badge/CrewAI-0.28%2B-purple)](https://github.com/joaomdmoura/crewAI) | `pip install crewai` | Role-based crews; task hierarchy |
+| [AG2](https://github.com/ag2ai/ag2) [![](https://img.shields.io/badge/AG2-0.3%2B-teal)](https://github.com/ag2ai/ag2) | `pip install ag2` | Community AutoGen fork; native Ollama support |
+| [DSPy](https://github.com/stanfordnlp/dspy) [![](https://img.shields.io/badge/DSPy-2.5%2B-blueviolet)](https://github.com/stanfordnlp/dspy) | `pip install dspy-ai` | Prompts as learnable parameters |
+| Databricks Mosaic AI | — | Planned |
+| OpenAI Agents SDK | — | Planned |
+| Claude SDK | — | Planned |
 
 ---
 
