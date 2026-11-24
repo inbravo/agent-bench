@@ -15,8 +15,8 @@
 set -euo pipefail
 
 # ── Config ────────────────────────────────────────────────────────────────────
-GITHUB_USERNAME="${GITHUB_USERNAME:-inbravo}"
-REPO="${REPO:-inbravo/agent-bench}"
+GITHUB_USERNAME="inbravo"
+REPO="inbravo/agent-bench"
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 log()  { echo "▸ $*"; }
