@@ -4,8 +4,7 @@
 # (dev + stress-test) for every agent-bench example.
 #
 # Prerequisites: gh CLI authenticated, run from the repo root.
-# Re-run safe: label creation uses || true; milestones are looked up
-# by title after creation so duplicate runs are safe.
+# Re-run safe: label/milestone creation uses || true.
 #
 # Usage:
 #   chmod +x create-github-issues.sh
@@ -20,7 +19,7 @@ log() { echo "▸ $*"; }
 ok()  { echo "  ✓ $*"; }
 
 # ── 1. Labels ─────────────────────────────────────────────────────────────────
-log "Creating labels…"
+log "Creating labels..."
 gh label create "enhancement" \
   --color "84b6eb" \
   --description "New example implementation" \
@@ -33,53 +32,49 @@ gh label create "stress-test" \
   --repo "$REPO" 2>/dev/null || true
 ok "label: stress-test"
 
-# ── 2. Milestones (one per pattern) ───────────────────────────────────────────
-# Returns the milestone number for a given title (creates if missing).
+# ── 2. Milestones (one per pattern, ASCII titles only) ────────────────────────
 ensure_milestone() {
   local title="$1"
   local desc="$2"
-  # Try to find existing
-  local num
-  num=$(gh api "repos/${REPO}/milestones?state=open&per_page=100" \
-    --jq ".[] | select(.title == \"${title}\") | .number" 2>/dev/null | head -1)
-  if [[ -z "$num" ]]; then
-    num=$(gh api "repos/${REPO}/milestones" \
-      --method POST \
-      --field title="${title}" \
-      --field description="${desc}" \
-      --jq ".number" 2>/dev/null)
-  fi
-  echo "$num"
+  gh api "repos/${REPO}/milestones" \
+    --method POST \
+    --field title="${title}" \
+    --field description="${desc}" \
+    --jq ".number" 2>/dev/null || \
+  gh api "repos/${REPO}/milestones?state=open&per_page=100" \
+    --jq ".[] | select(.title == \"${title}\") | .number" | head -1
 }
 
-log "Creating milestones (one per pattern)…"
-MS_TOOL_USE=$(ensure_milestone    "Pattern: Tool Use"             "Single-shot tool dispatch — agent selects and calls one tool")
-ok "milestone #${MS_TOOL_USE}: Tool Use"
+log "Creating milestones (one per pattern)..."
+MS_TOOL_USE="Pattern: Tool Use"
+MS_REACT="Pattern: ReAct"
+MS_FW_SWAP="Pattern: Framework Swap"
+MS_CPCD="Pattern: CPCD"
+MS_PROMPT_OPT="Pattern: Prompt Optimisation"
+MS_SELF_CRIT="Pattern: Self-Critique"
 
-MS_REACT=$(ensure_milestone       "Pattern: ReAct"                "Reason+Act loop — Thought / Action / Observation cycles")
-ok "milestone #${MS_REACT}: ReAct"
-
-MS_FW_SWAP=$(ensure_milestone     "Pattern: Framework Swap"       "Same task, different framework — direct CPCD comparison")
-ok "milestone #${MS_FW_SWAP}: Framework Swap"
-
-MS_CPCD=$(ensure_milestone        "Pattern: CPCD"                 "Cost-Per-Correct-Decision — primary benchmarking metric")
-ok "milestone #${MS_CPCD}: CPCD"
-
-MS_PROMPT_OPT=$(ensure_milestone  "Pattern: Prompt Optimisation"  "DSPy BootstrapFewShot — offline prompt compilation")
-ok "milestone #${MS_PROMPT_OPT}: Prompt Optimisation"
-
-MS_SELF_CRIT=$(ensure_milestone   "Pattern: Self-Critique"        "Producer-critique revision loop — online per-query improvement")
-ok "milestone #${MS_SELF_CRIT}: Self-Critique"
+ensure_milestone "$MS_TOOL_USE"    "Single-shot tool dispatch" >/dev/null || true
+ok "milestone: $MS_TOOL_USE"
+ensure_milestone "$MS_REACT"       "Reason+Act loop" >/dev/null || true
+ok "milestone: $MS_REACT"
+ensure_milestone "$MS_FW_SWAP"     "Same task, different framework" >/dev/null || true
+ok "milestone: $MS_FW_SWAP"
+ensure_milestone "$MS_CPCD"        "Cost-Per-Correct-Decision metric" >/dev/null || true
+ok "milestone: $MS_CPCD"
+ensure_milestone "$MS_PROMPT_OPT"  "DSPy BootstrapFewShot compilation" >/dev/null || true
+ok "milestone: $MS_PROMPT_OPT"
+ensure_milestone "$MS_SELF_CRIT"   "Producer-critique revision loop" >/dev/null || true
+ok "milestone: $MS_SELF_CRIT"
 
 echo ""
-log "Milestones ready. Creating issues…"
+log "Milestones ready. Creating issues..."
 echo ""
 
 # ── 3. Issue factory ──────────────────────────────────────────────────────────
-# create_issues <tag> <ms_num> <name> <folder> <pattern> <scenario> <framework> <assertions>
+# create_issues <tag> <milestone_title> <name> <folder> <pattern> <scenario> <framework> <assertions>
 create_issues() {
   local tag="$1"
-  local ms_num="$2"
+  local ms_title="$2"   # passed directly to --milestone (gh uses title)
   local name="$3"
   local folder="$4"
   local pattern="$5"
@@ -87,7 +82,7 @@ create_issues() {
   local framework="$7"
   local assertions="$8"
 
-  # ── Dev issue ────────────────────────────────────────────────────────────
+  # ── Dev issue ──────────────────────────────────────────────────────────────
   local dev_body
   dev_body=$(cat <<EOF
 ## Overview
@@ -120,12 +115,12 @@ EOF
     --title "[${tag}] Implement: ${name}" \
     --label "enhancement" \
     --assignee "$ASSIGNEE" \
-    --milestone "$ms_num" \
+    --milestone "${ms_title}" \
     --body "$dev_body" \
     > /dev/null
   ok "[${tag}] Implement: ${name}"
 
-  # ── Stress-test issue ────────────────────────────────────────────────────
+  # ── Stress-test issue ──────────────────────────────────────────────────────
   local stress_body
   stress_body=$(cat <<EOF
 ## Overview
@@ -163,7 +158,7 @@ EOF
     --title "[${tag}] Stress test: ${name}" \
     --label "stress-test" \
     --assignee "$ASSIGNEE" \
-    --milestone "$ms_num" \
+    --milestone "${ms_title}" \
     --body "$stress_body" \
     > /dev/null
   ok "[${tag}] Stress test: ${name}"
@@ -185,7 +180,7 @@ create_issues "tool-use" "$MS_TOOL_USE" \
 - [ ] Agent does NOT call both tools when only one is needed
 - [ ] Response includes the city name, temperature value, and unit
 - [ ] \`quality_score\` >= 0.7 when judged against the rubric
-- [ ] Token count for a single-tool call does not exceed 2 000 tokens"
+- [ ] Token count for a single-tool call does not exceed 2000 tokens"
 
 create_issues "tool-use" "$MS_TOOL_USE" \
   "Weather assistant (CrewAI)" \
@@ -218,7 +213,7 @@ create_issues "react" "$MS_REACT" \
   "Book finder (LangGraph)" \
   "reasoning/[react]-[langgraph]-[ollama]" \
   "ReAct" "Book finder" "LangGraph" \
-"- [ ] Agent emits at least one Thought → Action → Observation cycle before the final answer
+"- [ ] Agent emits at least one Thought -> Action -> Observation cycle before the final answer
 - [ ] \`search_book('dune')\` returns a dict with \`title\`, \`author\`, \`year\`
 - [ ] \`get_similar_books('Dune')\` returns a non-empty list
 - [ ] \`get_book_rating('Dune')\` returns a float between 0.0 and 5.0
@@ -257,7 +252,7 @@ create_issues "fw-swap" "$MS_FW_SWAP" \
   "Blog post crew (CrewAI)" \
   "topology/[fw-swap]-[crewai]-[ollama]" \
   "Framework Swap" "Blog post crew (Researcher -> Writer -> Editor)" "CrewAI" \
-"- [ ] Three agents exist: Researcher, Writer, Editor — in that sequential order
+"- [ ] Three agents exist: Researcher, Writer, Editor in that sequential order
 - [ ] Researcher output is passed verbatim as Writer input (no data loss between tasks)
 - [ ] Editor output is the crew's final result — no extra agent turn after Editor
 - [ ] Final output contains at least 150 words
@@ -318,6 +313,4 @@ create_issues "self-critique" "$MS_SELF_CRIT" \
 
 # ─────────────────────────────────────────────────────────────────────────────
 echo ""
-ISSUE_COUNT=$(gh issue list --repo "$REPO" --limit 200 --json number \
-  | python3 -c 'import sys,json; print(len(json.load(sys.stdin)))')
-log "All done. ${ISSUE_COUNT} issues now open on ${REPO}."
+log "All done. Issues created on ${REPO}."
