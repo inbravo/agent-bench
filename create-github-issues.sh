@@ -20,7 +20,7 @@ REPO="inbravo/agent-bench"
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 log()  { echo "▸ $*"; }
-done() { echo "  ✓ $*"; }
+ok() { echo "  ✓ $*"; }
 
 # ── 1. Labels ─────────────────────────────────────────────────────────────────
 log "Creating labels…"
@@ -28,13 +28,13 @@ gh label create "enhancement" \
   --color "84b6eb" \
   --description "New example implementation" \
   --repo "$REPO" || true
-done "label: enhancement"
+ok "label: enhancement"
 
 gh label create "stress-test" \
   --color "e4e669" \
   --description "Stress-test and pass/fail assertions for an example" \
   --repo "$REPO" || true
-done "label: stress-test"
+ok "label: stress-test"
 
 # ── 2. Milestones ─────────────────────────────────────────────────────────────
 log "Creating milestones…"
@@ -44,56 +44,56 @@ gh api repos/"$REPO"/milestones \
   --field title="S1 · Reasoning Mechanics" \
   --field description="Tool Use, ReAct, Reflection, Plan-and-Execute, Chain-of-Verification" \
   --silent || true
-done "milestone: S1 · Reasoning Mechanics"
+ok "milestone: S1 · Reasoning Mechanics"
 
 gh api repos/"$REPO"/milestones \
   --method POST \
   --field title="S2 · Agent Topology" \
   --field description="Framework Swap, Role Crew, Orchestrator-Worker, Fan-out" \
   --silent || true
-done "milestone: S2 · Agent Topology"
+ok "milestone: S2 · Agent Topology"
 
 gh api repos/"$REPO"/milestones \
   --method POST \
   --field title="S3 · Tool & Context Integration" \
   --field description="MCP Tools, RAG-as-Tool, Memory, GraphRAG" \
   --silent || true
-done "milestone: S3 · Tool & Context Integration"
+ok "milestone: S3 · Tool & Context Integration"
 
 gh api repos/"$REPO"/milestones \
   --method POST \
   --field title="S4 · Evaluation & Observability" \
   --field description="LLM-as-Judge, Trace-and-Score" \
   --silent || true
-done "milestone: S4 · Evaluation & Observability"
+ok "milestone: S4 · Evaluation & Observability"
 
 gh api repos/"$REPO"/milestones \
   --method POST \
   --field title="S5 · Decision Economics" \
   --field description="CPCD, Pareto Frontier, Decision Budget, Cost-Tier Routing, Degradation Curve" \
   --silent || true
-done "milestone: S5 · Decision Economics"
+ok "milestone: S5 · Decision Economics"
 
 gh api repos/"$REPO"/milestones \
   --method POST \
   --field title="S6 · Safety, Control & Governance" \
   --field description="HITL, Guardrails, Adversarial Stress, Dry-Run (Approval Gate)" \
   --silent || true
-done "milestone: S6 · Safety, Control & Governance"
+ok "milestone: S6 · Safety, Control & Governance"
 
 gh api repos/"$REPO"/milestones \
   --method POST \
   --field title="S7 · Deployment & Backend Portability" \
   --field description="Backend Swap, Framework Compare, Model Fallback" \
   --silent || true
-done "milestone: S7 · Deployment & Backend Portability"
+ok "milestone: S7 · Deployment & Backend Portability"
 
 gh api repos/"$REPO"/milestones \
   --method POST \
   --field title="S8 · Self-Improvement" \
   --field description="Prompt Optimisation (DSPy), Self-Critique (ollama-harness), Recursive Harness Opt (harness²)" \
   --silent || true
-done "milestone: S8 · Self-Improvement"
+ok "milestone: S8 · Self-Improvement"
 
 echo ""
 log "Labels and milestones done. Creating issues…"
@@ -160,7 +160,7 @@ EOF
     --body "$dev_body" \
     "${ms_flag[@]}" \
     > /dev/null
-  done "issue created → [${step}] Implement: ${name}"
+  ok "issue created → [${step}] Implement: ${name}"
 
   # ── Stress-test issue ────────────────────────────────────────────────────
   local stress_body
@@ -203,7 +203,7 @@ EOF
     --body "$stress_body" \
     "${ms_flag[@]}" \
     > /dev/null
-  done "issue created → [${step}] Stress test: ${name}"
+  ok "issue created → [${step}] Stress test: ${name}"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
