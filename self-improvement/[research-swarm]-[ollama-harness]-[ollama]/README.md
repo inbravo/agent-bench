@@ -7,6 +7,25 @@
 
 ---
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart TD
+    A([Query]) --> B[Producer LLM]
+    B --> C[Critic LLM]
+    C -- REVISE: reason --> B
+    C -- ACCEPT --> D([Final Answer])
+    B --> E{Max revisions?}
+    E -- Yes --> D
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#eeeeee,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+```
+
 ## What this demonstrates
 
 ollama-harness runs a **producer-critique loop** entirely locally:

@@ -2,6 +2,23 @@
 
 > **Category**: Agent Topology | **Pattern**: Framework Swap | **Framework**: CrewAI | **Backend**: Ollama
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart LR
+    A([Blog Topic]) --> B[Researcher]
+    B --> C[Writer]
+    C --> D[Editor]
+    D --> E([Published Post])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+```
+
 ## What This Example Demonstrates
 
 The same multi-step task (blog post generation) solved with CrewAI instead of LangGraph, enabling a direct framework comparison on CPCD.

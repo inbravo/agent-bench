@@ -2,6 +2,28 @@
 
 **Pattern**: ReAct (Reason + Act) | **Category**: Reasoning Mechanics | **Framework**: CrewAI | **Backend**: Ollama (local)
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart TD
+    A([Book Query]) --> B[Thought]
+    B --> C[Action]
+    C --> D[Tool Call]
+    D --> E[Observation]
+    E --> F{Final Answer?}
+    F -- No --> B
+    F -- Yes --> G([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#dbe4f0,stroke:#aaa
+    style F fill:#f5edda,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+```
+
 ## What this example does
 
 A book-finder agent that searches a catalogue, checks availability, and suggests alternatives — using three tools: `search_books`, `check_availability`, and `get_similar_books`.

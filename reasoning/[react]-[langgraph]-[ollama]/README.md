@@ -2,6 +2,34 @@
 
 > **Category**: Reasoning Mechanics | **Pattern**: ReAct | **Framework**: LangGraph | **Backend**: Ollama
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart TD
+    A([Book Query]) --> B[Thought]
+    B --> C[Action]
+    C -- search_book --> D[search_book]
+    C -- get_rating --> E[get_book_rating]
+    C -- similar --> F[get_similar_books]
+    D --> G[Observation]
+    E --> G
+    F --> G
+    G --> H{Done?}
+    H -- No --> B
+    H -- Yes --> I([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#d4ece8,stroke:#aaa
+    style G fill:#dbe4f0,stroke:#aaa
+    style H fill:#f5edda,stroke:#aaa
+    style I fill:#eeeeee,stroke:#aaa
+```
+
 ## What This Example Demonstrates
 
 The **ReAct (Reason + Act)** pattern: the agent alternates between Thought and Action, looping until it has enough information. Each observation can change the next thought.

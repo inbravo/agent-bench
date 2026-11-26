@@ -7,6 +7,30 @@ AG2's `AssistantAgent` is prompted with an explicit
 pattern over a mock book catalogue. Same task as the LangGraph and CrewAI ReAct
 versions — same tools, same rubric, direct CPCD comparison.
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart TD
+    A([Book Query]) --> B[UserProxyAgent]
+    B --> C[AssistantAgent]
+    C --> D[Thought]
+    D --> E[Action / Tool]
+    E --> F[Observation]
+    F --> G{Final Answer?}
+    G -- No --> D
+    G -- Yes --> H([TERMINATE])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#dbe4f0,stroke:#aaa
+    style G fill:#f5edda,stroke:#aaa
+    style H fill:#eeeeee,stroke:#aaa
+```
+
 ## Task
 
 Book finder: given a title the user enjoyed, (1) look it up in the catalogue,

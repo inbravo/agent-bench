@@ -2,6 +2,26 @@
 
 **Pattern**: Tool Use | **Category**: Reasoning Mechanics | **Framework**: CrewAI | **Backend**: Ollama (local)
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart LR
+    A([Weather Query]) --> B[CrewAI Agent]
+    B --> C{Which tool?}
+    C -- city query --> D[get_current_weather]
+    C -- unit convert --> E[convert_temperature]
+    D --> F([Answer])
+    E --> F
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
+
 ## What this example does
 
 A weather assistant that calls two tools — `get_current_weather` and `convert_temperature` — to answer questions like *"What is the current temperature in Tokyo? Convert it to Fahrenheit."*

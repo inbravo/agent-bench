@@ -55,6 +55,20 @@
 
 ### Tool Use
 
+```mermaid
+flowchart LR
+    A([Query]) --> B[Agent]
+    B --> C[Tool Selector]
+    C --> D[Tool Call]
+    D --> E([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: The agent selects a tool from a fixed set, calls it with arguments, and uses the result to answer. No loop — single-shot dispatch.
 
 **Scenario**: Weather assistant — `get_current_weather(city)`, `convert_temperature(value, unit)`
@@ -67,6 +81,23 @@
 ---
 
 ### ReAct (Reason + Act)
+
+```mermaid
+flowchart TD
+    A([Query]) --> B[Thought]
+    B --> C[Action / Tool Call]
+    C --> D[Observation]
+    D --> E{Done?}
+    E -- No --> B
+    E -- Yes --> F([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#d4ece8,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: The agent alternates between Thought and Action, looping until it has enough information. Each observation can change the next thought.
 
@@ -81,6 +112,21 @@
 
 ### Reflection
 
+```mermaid
+flowchart TD
+    A([Query]) --> B[Draft]
+    B --> C[Self-Critique]
+    C --> D{Accept?}
+    D -- No --> B
+    D -- Yes --> E([Final Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#f5edda,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: The agent produces a first draft, critiques it, then revises. The LLM acts as both author and reviewer.
 
 **Scenario**: *(Planned)* — draft-critique-revise loop on a short essay
@@ -94,6 +140,22 @@
 
 ### Plan-and-Execute
 
+```mermaid
+flowchart LR
+    A([Query]) --> B[Planner]
+    B --> C[Step 1]
+    C --> D[Step 2]
+    D --> E[Step N]
+    E --> F([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#d4ece8,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: Creates a full multi-step plan first, then executes each step in sequence. The plan can be revised mid-execution if a step fails.
 
 **Scenario**: *(Planned)* — multi-step research assistant that plans its searches before making any
@@ -106,6 +168,28 @@
 ---
 
 ### Chain-of-Verification (CoVe)
+
+```mermaid
+flowchart TD
+    A([Query]) --> B[Baseline Answer]
+    B --> C[Decompose Claims]
+    C --> D[Verify Claim 1]
+    C --> E[Verify Claim 2]
+    C --> F[Verify Claim N]
+    D --> G[Revise Answer]
+    E --> G
+    F --> G
+    G --> H([Verified Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#d4ece8,stroke:#aaa
+    style G fill:#dbe4f0,stroke:#aaa
+    style H fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: The agent generates a baseline answer, decomposes it into a checklist of verifiable claims, verifies each claim independently (via tool call or LLM re-query), then revises the answer to remove any claim that failed verification.
 
@@ -125,6 +209,23 @@
 
 ### Framework Swap
 
+```mermaid
+flowchart LR
+    A([Task]) --> B[Framework A]
+    A --> C[Framework B]
+    B --> D[CPCD A]
+    C --> E[CPCD B]
+    D --> F{Compare}
+    E --> F
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#f5edda,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: The same task is implemented with two different frameworks (LangGraph and CrewAI). Goal: direct CPCD comparison.
 
 **Scenario**: Blog post crew — Researcher → Writer → Editor (CrewAI sequential)
@@ -137,6 +238,20 @@
 ---
 
 ### Role-Based Crew
+
+```mermaid
+flowchart LR
+    A([Task]) --> B[Researcher]
+    B --> C[Writer]
+    C --> D[Editor]
+    D --> E([Output])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: Multiple specialised agents, each with a defined role, collaborate on a task. Roles are non-overlapping.
 
@@ -151,6 +266,26 @@
 
 ### Orchestrator-Worker
 
+```mermaid
+flowchart TD
+    A([Task]) --> B[Orchestrator]
+    B --> C[Worker A]
+    B --> D[Worker B]
+    B --> E[Worker N]
+    C --> F[Synthesise]
+    D --> F
+    E --> F
+    F --> G([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#d4ece8,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#dbe4f0,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: A central orchestrator decomposes a task, dispatches sub-tasks to workers, and aggregates results. Workers do not communicate with each other.
 
 **Scenario**: *(Planned)* — research orchestrator spawning per-topic worker agents
@@ -162,6 +297,26 @@
 ---
 
 ### Parallel Fan-out
+
+```mermaid
+flowchart TD
+    A([Task]) --> B[Dispatcher]
+    B --> C[Worker 1]
+    B --> D[Worker 2]
+    B --> E[Worker N]
+    C --> F[Aggregate]
+    D --> F
+    E --> F
+    F --> G([Combined Result])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#d4ece8,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#dbe4f0,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: The orchestrator dispatches multiple workers simultaneously and waits for all to complete before aggregating.
 
@@ -180,6 +335,24 @@
 
 ### MCP Tools
 
+```mermaid
+flowchart LR
+    A([Query]) --> B[Agent]
+    B --> C[MCP Client]
+    C --> D[MCP Server A]
+    C --> E[MCP Server B]
+    D --> B
+    E --> B
+    B --> F([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: The agent connects to external services via the Model Context Protocol (MCP), treating each service as a tool.
 
 **Scenario**: *(Planned)* — file system + calendar access via MCP servers
@@ -192,6 +365,24 @@
 ---
 
 ### RAG-as-Tool
+
+```mermaid
+flowchart LR
+    A([Query]) --> B[Agent]
+    B --> C{Need context?}
+    C -- Yes --> D[Vector Search]
+    D --> E[Retrieved Chunks]
+    E --> B
+    C -- No --> F([Answer])
+    B --> F
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: A vector search retrieval function is registered as an agent tool. The agent decides *when* to retrieve and *what query* to use.
 
@@ -206,6 +397,20 @@
 
 ### Memory
 
+```mermaid
+flowchart LR
+    A([Query]) --> B[Agent]
+    B --> C[(Memory Store)]
+    C -- Read --> B
+    B -- Write --> C
+    B --> D([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#d4ece8,stroke:#aaa
+    style D fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: The agent reads from and writes to a persistent memory store across turns.
 
 **Scenario**: *(Planned)* — personal assistant that remembers user preferences across sessions
@@ -218,6 +423,23 @@
 ---
 
 ### GraphRAG
+
+```mermaid
+flowchart LR
+    A([Query]) --> B[Agent]
+    B --> C[Entity Extractor]
+    C --> D[(Knowledge Graph)]
+    D -- Traverse --> E[Subgraph]
+    E --> B
+    B --> F([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: Retrieval is performed over a knowledge graph rather than a flat vector index. Entities (people, systems, regulations) and their relationships are stored as nodes and edges. The agent traverses the graph to retrieve structured, relationship-aware context — not just similar chunks.
 
@@ -237,6 +459,18 @@
 
 ### LLM-as-Judge
 
+```mermaid
+flowchart LR
+    A([Task + Answer]) --> B[Judge LLM]
+    B --> C[Rubric Score]
+    C --> D([quality_score])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: A second LLM call evaluates the primary agent's output against a rubric, returning a numeric score.
 
 **Scenario**: *(Planned)* — standalone judge that takes `(task, answer, rubric)` and returns a structured score
@@ -249,6 +483,20 @@
 ---
 
 ### Trace-and-Score
+
+```mermaid
+flowchart LR
+    A([Agent Run]) --> B[Trace Emitter]
+    B --> C[(Trace Store)]
+    C --> D[Scorer]
+    D --> E([CPCD + quality_score])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#d4ece8,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: Every agent run emits a structured trace (tool calls, intermediate states, latency, token counts). The trace is scored post-hoc.
 
@@ -266,6 +514,21 @@
 
 ### CPCD (Cost-Per-Correct-Decision)
 
+```mermaid
+flowchart LR
+    A([Agent Run]) --> B[token_cost_usd]
+    A --> C[quality_score]
+    B --> D[CPCD = cost / quality]
+    C --> D
+    D --> E([Rank Candidates])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#f5edda,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: `CPCD = token_cost_usd / quality_score` — the primary benchmarking metric of this repo.
 
 **Scenario**: Multi-framework comparison dashboard — LangGraph vs CrewAI on the same task
@@ -279,6 +542,22 @@
 
 ### Pareto Frontier
 
+```mermaid
+flowchart LR
+    A([N Runs]) --> B[cost vs quality plot]
+    B --> C{Dominated?}
+    C -- No --> D[Pareto Front]
+    C -- Yes --> E[Discard]
+    D --> F([Optimal Candidates])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: Plot all candidate runs on a (cost, quality) plane. Pareto-optimal runs are those where no other run is both cheaper and higher quality.
 
 **Scenario**: *(Planned)* — 6-way comparison across 3 frameworks × 2 backends
@@ -290,6 +569,21 @@
 ---
 
 ### Decision Budget
+
+```mermaid
+flowchart TD
+    A([Task + Budget]) --> B[Agent]
+    B --> C{Budget left?}
+    C -- Yes --> D[Next Tool Call]
+    D --> B
+    C -- No --> E([Best Answer So Far])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: The agent is given a token or cost budget and must decide how many reasoning steps to take, trading depth against cost.
 
@@ -303,6 +597,24 @@
 
 ### Cost-Tier Routing
 
+```mermaid
+flowchart LR
+    A([Task]) --> B[Complexity Classifier]
+    B -- Simple --> C[Tier 1 cheap model]
+    B -- Medium --> D[Tier 2 mid model]
+    B -- Complex --> E[Tier 3 expensive model]
+    C --> F([Answer])
+    D --> F
+    E --> F
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#d4ece8,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: Route each task to the cheapest model tier that can answer it at acceptable quality. Simple tasks → cheap model; complex tasks → expensive model.
 
 **Scenario**: *(Planned)* — routing agent classifying task complexity and dispatching to tier-1/2/3
@@ -315,6 +627,24 @@
 ---
 
 ### Degradation Curve
+
+```mermaid
+flowchart LR
+    A([Task]) --> B[Model 1 small]
+    A --> C[Model 2 mid]
+    A --> D[Model 3 large]
+    B --> E[quality + cost]
+    C --> E
+    D --> E
+    E --> F([Degradation Curve])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: Measure how quality degrades as you reduce cost. Plot the curve to find the quality cliff.
 
@@ -332,6 +662,25 @@
 
 ### HITL (Human-in-the-Loop)
 
+```mermaid
+flowchart TD
+    A([Task]) --> B[Agent]
+    B --> C{High-risk action?}
+    C -- No --> D[Execute]
+    C -- Yes --> E[Human Review]
+    E -- Approve --> D
+    E -- Reject --> F([Stop])
+    D --> G([Answer])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: The agent pauses at defined decision points and waits for human confirmation before proceeding.
 
 **Scenario**: *(Planned)* — expense approval agent that pauses before submitting any amount > £500
@@ -344,6 +693,23 @@
 ---
 
 ### Guardrails
+
+```mermaid
+flowchart LR
+    A([Input]) --> B[Input Filter]
+    B --> C[Agent]
+    C --> D[Output Filter]
+    D --> E([Safe Output])
+    B -- Block --> F([Reject])
+    D -- Block --> F
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#f5edda,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#f5edda,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: Input and output filters that block disallowed content, enforce response format, and prevent prompt injection.
 
@@ -358,6 +724,25 @@
 
 ### Adversarial Stress
 
+```mermaid
+flowchart LR
+    A([Injection Attempts]) --> B[Agent]
+    B --> C[Policy Check]
+    C -- Pass --> D([Safe Response])
+    C -- Fail --> E([Policy Violation])
+    D --> F[Score]
+    E --> F
+    F --> G([Stress Test Report])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#eeeeee,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+    style F fill:#dbe4f0,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: Systematically test the agent against prompt injection, goal hijacking, and jailbreak attempts.
 
 **Scenario**: *(Planned)* — adversarial test suite: 20 injection attempts, scoring policy adherence
@@ -369,6 +754,26 @@
 ---
 
 ### Dry-Run (Approval Gate)
+
+```mermaid
+flowchart TD
+    A([Task]) --> B[Agent]
+    B --> C[Propose Action]
+    C --> D[Simulate / Dry-Run]
+    D --> E[Human or Policy Review]
+    E -- Approve --> F[Execute]
+    E -- Reject --> G([Stop])
+    F --> H([Done])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#d4ece8,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+    style H fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: The agent proposes an action, simulates its effect without executing it, presents the proposal to a human (or policy engine), and waits for explicit approval before proceeding. The agentic equivalent of a four-eyes principle.
 
@@ -388,6 +793,24 @@
 
 ### Backend Swap
 
+```mermaid
+flowchart LR
+    A([agent.py]) --> B[config.yaml]
+    B -- backend: ollama --> C[Ollama]
+    B -- backend: openai --> D[OpenAI]
+    B -- backend: databricks --> E[Databricks]
+    C --> F([Same Output])
+    D --> F
+    E --> F
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#d4ece8,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: The agent code is identical; only the LLM backend changes (Ollama → OpenAI → Databricks → Anthropic) via `config.yaml`.
 
 **Scenario**: *(Planned)* — weather assistant running on Ollama, then swapped to GPT-4o-mini via config only
@@ -400,6 +823,25 @@
 
 ### Framework Swap (compare)
 
+```mermaid
+flowchart LR
+    A([Task]) --> B[LangGraph impl]
+    A --> C[CrewAI impl]
+    B --> D[CPCD_lg]
+    C --> E[CPCD_crew]
+    D --> F[Migration Delta]
+    E --> F
+    F --> G([Which to keep?])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#f5edda,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#dbe4f0,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+```
+
 **What it is**: Document and measure the effort required to migrate from one framework to another.
 
 **Scenario**: *(Planned)* — migration journal: LangGraph → CrewAI
@@ -410,6 +852,22 @@
 ---
 
 ### Model Fallback Chain
+
+```mermaid
+flowchart LR
+    A([Task]) --> B[Primary Model]
+    B -- Fail --> C[Secondary Model]
+    C -- Fail --> D[Tertiary Model]
+    B -- OK --> E([Answer])
+    C -- OK --> E
+    D --> E
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: The agent tries a primary model; on failure it falls back to a secondary, then a tertiary model.
 
@@ -435,6 +893,24 @@ Does the cost of optimisation produce a measurable quality gain?
 
 ### Prompt Optimisation (DSPy / BootstrapFewShot)
 
+```mermaid
+flowchart LR
+    A([Training Examples]) --> B[BootstrapFewShot]
+    B --> C[Compiled Prompt]
+    C --> D[Agent Run]
+    D --> E[CPCD_after]
+    F([Baseline CPCD]) --> G[CPCD_delta]
+    E --> G
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+    style G fill:#f5edda,stroke:#aaa
+```
+
 **What it is**: Treats prompts as learnable parameters. A `BootstrapFewShot`
 optimiser generates labelled demonstrations from a small training set, then
 recompiles the agent's prompt to include the highest-scoring examples.
@@ -452,6 +928,22 @@ runs before and after `optimiser.compile()`; CPCD_delta measures the gain.
 ---
 
 ### Self-Critique (ollama-harness / Producer-Critique Loop)
+
+```mermaid
+flowchart TD
+    A([Query]) --> B[Producer LLM]
+    B --> C[Critic LLM]
+    C -- REVISE --> B
+    C -- ACCEPT --> D([Final Answer])
+    B --> E{Max revisions?}
+    E -- Yes --> D
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#eeeeee,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+```
 
 **What it is**: An online, **per-query** revision loop. A producer LLM generates
 an answer; a critic LLM says `ACCEPT` or `REVISE: <improved>`. The loop runs up
@@ -471,6 +963,24 @@ answer directly against the task.
 ---
 
 ### Recursive Harness Optimisation (harness²)
+
+```mermaid
+flowchart TD
+    A([Task Distribution]) --> B[Harness Run]
+    B --> C[CPCD per task]
+    C --> D[Meta-Optimiser]
+    D -- Rewrite config --> B
+    D --> E{Converged?}
+    E -- No --> B
+    E -- Yes --> F([Optimal Harness Config])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#dbe4f0,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
 
 **What it is**: A meta-optimiser that wraps an entire benchmark harness.
 Across multiple task runs it learns which prompt variants, tool orderings, or

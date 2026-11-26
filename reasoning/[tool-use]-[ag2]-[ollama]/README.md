@@ -7,6 +7,28 @@ via its `AssistantAgent` + `UserProxyAgent` pair with **native Ollama tool
 calling** — no LiteLLM proxy required. The assistant decides which tool to call;
 the proxy executes it and returns the result, all within the same conversation loop.
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart LR
+    A([Weather Query]) --> B[UserProxyAgent]
+    B --> C[AssistantAgent]
+    C --> D{Which tool?}
+    D -- city query --> E[get_current_weather]
+    D -- unit convert --> F[convert_temperature]
+    E --> G([TERMINATE])
+    F --> G
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#f5edda,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#d4ece8,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+```
+
 ## Task
 
 Weather assistant: given a city name, return the current temperature in both

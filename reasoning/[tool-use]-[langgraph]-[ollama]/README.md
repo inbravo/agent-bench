@@ -2,6 +2,26 @@
 
 > **Category**: Reasoning Mechanics | **Pattern**: Tool Use | **Framework**: LangGraph | **Backend**: Ollama
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart LR
+    A([Weather Query]) --> B[LangGraph Agent]
+    B --> C{Which tool?}
+    C -- city query --> D[get_current_weather]
+    C -- unit convert --> E[convert_temperature]
+    D --> F([Answer])
+    E --> F
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#f5edda,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#d4ece8,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+```
+
 ## What This Example Demonstrates
 
 The **Tool Use** pattern: the agent selects a tool from a fixed set, calls it with arguments, and uses the result to answer. No reasoning loop — single-shot dispatch.

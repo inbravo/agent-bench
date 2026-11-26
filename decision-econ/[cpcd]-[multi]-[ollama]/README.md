@@ -2,6 +2,28 @@
 
 > **Category**: Decision Economics | **Pattern**: CPCD | **Framework**: Multi | **Backend**: Ollama
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart LR
+    A([Task]) --> B[LangGraph Run]
+    A --> C[CrewAI Run]
+    B --> D[CPCD_lg]
+    C --> E[CPCD_crew]
+    D --> F[Rank by CPCD]
+    E --> F
+    F --> G([Best Framework])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#f5edda,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#dbe4f0,stroke:#aaa
+    style G fill:#eeeeee,stroke:#aaa
+```
+
 ## What This Example Demonstrates
 
 The benchmarking hub of the repo. Runs the same task through multiple frameworks, scores each, and ranks by CPCD:

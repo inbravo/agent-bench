@@ -7,6 +7,29 @@
 
 ---
 
+
+## Pattern Diagram
+
+```mermaid
+flowchart LR
+    A([Training Set]) --> B[BootstrapFewShot]
+    B --> C[Compiled Prompt]
+    C --> D[Agent Run]
+    D --> E[CPCD_after]
+    F([Baseline]) --> G[CPCD_delta]
+    E --> G
+    G --> H([ROI of optimisation])
+
+    style A fill:#eeeeee,stroke:#aaa
+    style B fill:#dbe4f0,stroke:#aaa
+    style C fill:#dbe4f0,stroke:#aaa
+    style D fill:#d4ece8,stroke:#aaa
+    style E fill:#f5edda,stroke:#aaa
+    style F fill:#eeeeee,stroke:#aaa
+    style G fill:#f5edda,stroke:#aaa
+    style H fill:#eeeeee,stroke:#aaa
+```
+
 ## What this demonstrates
 
 DSPy treats prompts as *learnable parameters*. Instead of writing a prompt by
