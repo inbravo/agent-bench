@@ -62,11 +62,11 @@ flowchart LR
     C --> D[Tool Call]
     D --> E([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent selects a tool from a fixed set, calls it with arguments, and uses the result to answer. No loop — single-shot dispatch.
@@ -91,12 +91,12 @@ flowchart TD
     E -- No --> B
     E -- Yes --> F([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#d4ece8,stroke:#aaa
-    style D fill:#dbe4f0,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#2e8b6e,stroke:#fff,color:#fff
+    style D fill:#4a7ab5,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent alternates between Thought and Action, looping until it has enough information. Each observation can change the next thought.
@@ -120,11 +120,11 @@ flowchart TD
     D -- No --> B
     D -- Yes --> E([Final Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#f5edda,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#c48a1a,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent produces a first draft, critiques it, then revises. The LLM acts as both author and reviewer.
@@ -148,12 +148,12 @@ flowchart LR
     D --> E[Step N]
     E --> F([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#d4ece8,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#2e8b6e,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Creates a full multi-step plan first, then executes each step in sequence. The plan can be revised mid-execution if a step fails.
@@ -181,14 +181,14 @@ flowchart TD
     F --> G
     G --> H([Verified Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#d4ece8,stroke:#aaa
-    style G fill:#dbe4f0,stroke:#aaa
-    style H fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#2e8b6e,stroke:#fff,color:#fff
+    style G fill:#4a7ab5,stroke:#fff,color:#fff
+    style H fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent generates a baseline answer, decomposes it into a checklist of verifiable claims, verifies each claim independently (via tool call or LLM re-query), then revises the answer to remove any claim that failed verification.
@@ -218,12 +218,12 @@ flowchart LR
     D --> F{Compare}
     E --> F
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#f5edda,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#c48a1a,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The same task is implemented with two different frameworks (LangGraph and CrewAI). Goal: direct CPCD comparison.
@@ -246,11 +246,11 @@ flowchart LR
     C --> D[Editor]
     D --> E([Output])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#dbe4f0,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#4a7ab5,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Multiple specialised agents, each with a defined role, collaborate on a task. Roles are non-overlapping.
@@ -277,13 +277,13 @@ flowchart TD
     E --> F
     F --> G([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#d4ece8,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#dbe4f0,stroke:#aaa
-    style G fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#2e8b6e,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#4a7ab5,stroke:#fff,color:#fff
+    style G fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: A central orchestrator decomposes a task, dispatches sub-tasks to workers, and aggregates results. Workers do not communicate with each other.
@@ -309,13 +309,13 @@ flowchart TD
     E --> F
     F --> G([Combined Result])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#d4ece8,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#dbe4f0,stroke:#aaa
-    style G fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#2e8b6e,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#4a7ab5,stroke:#fff,color:#fff
+    style G fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The orchestrator dispatches multiple workers simultaneously and waits for all to complete before aggregating.
@@ -345,12 +345,12 @@ flowchart LR
     E --> B
     B --> F([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent connects to external services via the Model Context Protocol (MCP), treating each service as a tool.
@@ -376,12 +376,12 @@ flowchart LR
     C -- No --> F([Answer])
     B --> F
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#f5edda,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#c48a1a,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: A vector search retrieval function is registered as an agent tool. The agent decides *when* to retrieve and *what query* to use.
@@ -405,10 +405,10 @@ flowchart LR
     B -- Write --> C
     B --> D([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#d4ece8,stroke:#aaa
-    style D fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#2e8b6e,stroke:#fff,color:#fff
+    style D fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent reads from and writes to a persistent memory store across turns.
@@ -433,12 +433,12 @@ flowchart LR
     E --> B
     B --> F([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Retrieval is performed over a knowledge graph rather than a flat vector index. Entities (people, systems, regulations) and their relationships are stored as nodes and edges. The agent traverses the graph to retrieve structured, relationship-aware context — not just similar chunks.
@@ -465,10 +465,10 @@ flowchart LR
     B --> C[Rubric Score]
     C --> D([quality_score])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#f5edda,stroke:#aaa
-    style D fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#c48a1a,stroke:#fff,color:#fff
+    style D fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: A second LLM call evaluates the primary agent's output against a rubric, returning a numeric score.
@@ -491,11 +491,11 @@ flowchart LR
     C --> D[Scorer]
     D --> E([CPCD + quality_score])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#d4ece8,stroke:#aaa
-    style D fill:#dbe4f0,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#2e8b6e,stroke:#fff,color:#fff
+    style D fill:#4a7ab5,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Every agent run emits a structured trace (tool calls, intermediate states, latency, token counts). The trace is scored post-hoc.
@@ -522,11 +522,11 @@ flowchart LR
     C --> D
     D --> E([Rank Candidates])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#f5edda,stroke:#aaa
-    style C fill:#f5edda,stroke:#aaa
-    style D fill:#dbe4f0,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#c48a1a,stroke:#fff,color:#fff
+    style C fill:#c48a1a,stroke:#fff,color:#fff
+    style D fill:#4a7ab5,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: `CPCD = token_cost_usd / quality_score` — the primary benchmarking metric of this repo.
@@ -550,12 +550,12 @@ flowchart LR
     C -- Yes --> E[Discard]
     D --> F([Optimal Candidates])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#f5edda,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#c48a1a,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Plot all candidate runs on a (cost, quality) plane. Pareto-optimal runs are those where no other run is both cheaper and higher quality.
@@ -578,11 +578,11 @@ flowchart TD
     D --> B
     C -- No --> E([Best Answer So Far])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#f5edda,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#c48a1a,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent is given a token or cost budget and must decide how many reasoning steps to take, trading depth against cost.
@@ -607,12 +607,12 @@ flowchart LR
     D --> F
     E --> F
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#d4ece8,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#2e8b6e,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Route each task to the cheapest model tier that can answer it at acceptable quality. Simple tasks → cheap model; complex tasks → expensive model.
@@ -638,12 +638,12 @@ flowchart LR
     D --> E
     E --> F([Degradation Curve])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#dbe4f0,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#4a7ab5,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Measure how quality degrades as you reduce cost. Plot the curve to find the quality cliff.
@@ -672,13 +672,13 @@ flowchart TD
     E -- Reject --> F([Stop])
     D --> G([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#f5edda,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
-    style G fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#c48a1a,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
+    style G fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent pauses at defined decision points and waits for human confirmation before proceeding.
@@ -703,12 +703,12 @@ flowchart LR
     B -- Block --> F([Reject])
     D -- Block --> F
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#f5edda,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#f5edda,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#c48a1a,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#c48a1a,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Input and output filters that block disallowed content, enforce response format, and prevent prompt injection.
@@ -734,13 +734,13 @@ flowchart LR
     E --> F
     F --> G([Stress Test Report])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#f5edda,stroke:#aaa
-    style D fill:#eeeeee,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
-    style F fill:#dbe4f0,stroke:#aaa
-    style G fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#c48a1a,stroke:#fff,color:#fff
+    style D fill:#666666,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
+    style F fill:#4a7ab5,stroke:#fff,color:#fff
+    style G fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Systematically test the agent against prompt injection, goal hijacking, and jailbreak attempts.
@@ -765,14 +765,14 @@ flowchart TD
     E -- Reject --> G([Stop])
     F --> H([Done])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#d4ece8,stroke:#aaa
-    style G fill:#eeeeee,stroke:#aaa
-    style H fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#2e8b6e,stroke:#fff,color:#fff
+    style G fill:#666666,stroke:#fff,color:#fff
+    style H fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent proposes an action, simulates its effect without executing it, presents the proposal to a human (or policy engine), and waits for explicit approval before proceeding. The agentic equivalent of a four-eyes principle.
@@ -803,12 +803,12 @@ flowchart LR
     D --> F
     E --> F
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#d4ece8,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#2e8b6e,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent code is identical; only the LLM backend changes (Ollama → OpenAI → Databricks → Anthropic) via `config.yaml`.
@@ -833,13 +833,13 @@ flowchart LR
     E --> F
     F --> G([Which to keep?])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#f5edda,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#dbe4f0,stroke:#aaa
-    style G fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#c48a1a,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#4a7ab5,stroke:#fff,color:#fff
+    style G fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: Document and measure the effort required to migrate from one framework to another.
@@ -862,11 +862,11 @@ flowchart LR
     C -- OK --> E
     D --> E
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#dbe4f0,stroke:#aaa
-    style E fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#4a7ab5,stroke:#fff,color:#fff
+    style E fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: The agent tries a primary model; on failure it falls back to a secondary, then a tertiary model.
@@ -902,13 +902,13 @@ flowchart LR
     F([Baseline CPCD]) --> G[CPCD_delta]
     E --> G
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
-    style G fill:#f5edda,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
+    style G fill:#c48a1a,stroke:#fff,color:#fff
 ```
 
 **What it is**: Treats prompts as learnable parameters. A `BootstrapFewShot`
@@ -938,11 +938,11 @@ flowchart TD
     B --> E{Max revisions?}
     E -- Yes --> D
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#eeeeee,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#666666,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
 ```
 
 **What it is**: An online, **per-query** revision loop. A producer LLM generates
@@ -974,12 +974,12 @@ flowchart TD
     E -- No --> B
     E -- Yes --> F([Optimal Harness Config])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#f5edda,stroke:#aaa
-    style D fill:#dbe4f0,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#c48a1a,stroke:#fff,color:#fff
+    style D fill:#4a7ab5,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
 ```
 
 **What it is**: A meta-optimiser that wraps an entire benchmark harness.

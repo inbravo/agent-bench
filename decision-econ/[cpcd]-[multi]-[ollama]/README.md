@@ -15,13 +15,13 @@ flowchart LR
     E --> F
     F --> G([Best Framework])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#f5edda,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#dbe4f0,stroke:#aaa
-    style G fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#c48a1a,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#4a7ab5,stroke:#fff,color:#fff
+    style G fill:#666666,stroke:#fff,color:#fff
 ```
 
 ## What This Example Demonstrates

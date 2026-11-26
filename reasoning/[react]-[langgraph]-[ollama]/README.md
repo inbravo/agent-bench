@@ -19,15 +19,15 @@ flowchart TD
     H -- No --> B
     H -- Yes --> I([Answer])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#d4ece8,stroke:#aaa
-    style G fill:#dbe4f0,stroke:#aaa
-    style H fill:#f5edda,stroke:#aaa
-    style I fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#2e8b6e,stroke:#fff,color:#fff
+    style G fill:#4a7ab5,stroke:#fff,color:#fff
+    style H fill:#c48a1a,stroke:#fff,color:#fff
+    style I fill:#666666,stroke:#fff,color:#fff
 ```
 
 ## What This Example Demonstrates

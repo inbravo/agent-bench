@@ -20,13 +20,13 @@ flowchart LR
     E --> G([TERMINATE])
     F --> G
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#f5edda,stroke:#aaa
-    style E fill:#d4ece8,stroke:#aaa
-    style F fill:#d4ece8,stroke:#aaa
-    style G fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#c48a1a,stroke:#fff,color:#fff
+    style E fill:#2e8b6e,stroke:#fff,color:#fff
+    style F fill:#2e8b6e,stroke:#fff,color:#fff
+    style G fill:#666666,stroke:#fff,color:#fff
 ```
 
 ## Task

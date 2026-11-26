@@ -20,14 +20,14 @@ flowchart LR
     E --> G
     G --> H([ROI of optimisation])
 
-    style A fill:#eeeeee,stroke:#aaa
-    style B fill:#dbe4f0,stroke:#aaa
-    style C fill:#dbe4f0,stroke:#aaa
-    style D fill:#d4ece8,stroke:#aaa
-    style E fill:#f5edda,stroke:#aaa
-    style F fill:#eeeeee,stroke:#aaa
-    style G fill:#f5edda,stroke:#aaa
-    style H fill:#eeeeee,stroke:#aaa
+    style A fill:#666666,stroke:#fff,color:#fff
+    style B fill:#4a7ab5,stroke:#fff,color:#fff
+    style C fill:#4a7ab5,stroke:#fff,color:#fff
+    style D fill:#2e8b6e,stroke:#fff,color:#fff
+    style E fill:#c48a1a,stroke:#fff,color:#fff
+    style F fill:#666666,stroke:#fff,color:#fff
+    style G fill:#c48a1a,stroke:#fff,color:#fff
+    style H fill:#666666,stroke:#fff,color:#fff
 ```
 
 ## What this demonstrates
